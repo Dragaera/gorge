@@ -1,0 +1,2 @@
+require 'gorge/logger'
+

@@ -9,4 +9,5 @@ gem 'rake'
 
 group :development do
   gem 'dotenv'
+  gem 'pry'
 end

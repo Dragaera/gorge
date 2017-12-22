@@ -6,5 +6,8 @@ opts[:database] = Gorge::Config::Database::DATABASE if Gorge::Config::Database::
 opts[:user]     = Gorge::Config::Database::USER     if Gorge::Config::Database::USER
 opts[:password] = Gorge::Config::Database::PASS     if Gorge::Config::Database::PASS
 opts[:test]     = true
+opts[:logger]   = Gorge.logger(program: 'sequel')
 
-Sequel::Model.db = Sequel.connect(opts)
+DB = Sequel.connect(opts)
+DB.extension(:pagination)
+Sequel::Model.db = DB
