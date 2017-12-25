@@ -5,7 +5,7 @@ Sequel.migration do
 
       String :name, null: false, unique: true
     end
-    [[1, 'Marines'], [2, 'Aliens']].each do |ary|
+    [[0, 'Draw'], [1, 'Marines'], [2, 'Aliens']].each do |ary|
       from(:teams).insert(id: ary[0], name: ary[1])
     end
 
@@ -25,7 +25,7 @@ Sequel.migration do
       DateTime :timestamp,           null: false
       Integer  :max_players_marines, null: false
       Integer  :max_players_aliens,  null: false
-      Integer  :tournament_mode,     null: false
+      Bool     :tournament_mode,     null: false
 
       index [:server_id, :round_id], unique: true
     end
