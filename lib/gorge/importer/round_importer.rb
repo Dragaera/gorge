@@ -1,3 +1,5 @@
+require 'set'
+
 module Gorge
   module Importer
     class RoundImporter
@@ -70,7 +72,13 @@ module Gorge
           round_hashes = round_hashes.to_a
 
           round_ids = round_hashes.map { |hsh| hsh[:roundId] }
-          existing_ids = @server.rounds_dataset.where(round_id: round_ids).select(:round_id).map(&:round_id)
+          existing_ids = Set.new(
+            @server.
+            rounds_dataset.
+            where(round_id: round_ids).
+            select(:round_id).
+            map(&:round_id)
+          )
           round_hashes.reject! { |hsh| existing_ids.include? hsh[:roundId] }
 
           yield(round_hashes.to_a, existing_ids.length)
