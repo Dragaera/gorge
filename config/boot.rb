@@ -10,5 +10,7 @@ require 'gorge'
 require 'config/gorge'
 require 'config/database'
 
-# Has to be loaded after DB is ready.
-require 'gorge/models'
+unless ENV['GORGE_SKIP_MODELS'] == '1'
+  # Has to be loaded after DB is ready.
+  require 'gorge/models'
+end
