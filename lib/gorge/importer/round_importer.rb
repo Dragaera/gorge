@@ -5,11 +5,9 @@ module Gorge
     class RoundImporter
       ROUND_IMPORT_BATCH_SIZE = 10_000
 
-      def initialize(file, server:)
-        @source_db = Sequel.connect("sqlite://#{ file }")
-        @source_db.extension(:pagination)
-
+      def initialize(source_db:, server:)
         @server = server
+        @source_db = source_db
 
         @target_db = DB
 

@@ -3,9 +3,8 @@ module Gorge
     class PlayerImporter
       PLAYER_IMPORT_BATCH_SIZE = 10_000
 
-      def initialize(file)
-        @source_db = Sequel.connect("sqlite://#{ file }")
-        @source_db.extension(:pagination)
+      def initialize(source_db:)
+        @source_db = source_db
 
         @target_db = DB
 
