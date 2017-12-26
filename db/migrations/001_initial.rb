@@ -41,6 +41,7 @@ Sequel.migration do
 
       foreign_key :player_id, :players, null: false, on_update: :cascade, on_delete: :cascade
       foreign_key :round_id,  :rounds,  null: false, on_update: :cascade, on_delete: :cascade
+      foreign_key :team_id,   :teams,   null: false, on_update: :cascade, on_delete: :restrict
 
       Float :time_played,    null: false
       Float :time_building,  null: false
@@ -59,6 +60,8 @@ Sequel.migration do
       Float :structure_damage, null: false
 
       Integer :score, null: false
+
+      index [:player_id, :round_id, :team_id], unique: true
     end
   end
 
