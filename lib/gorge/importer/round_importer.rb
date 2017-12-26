@@ -13,6 +13,7 @@ module Gorge
 
         @l = Gorge.logger(program: 'importer')
         @l.module = 'rounds'
+        @l.add_attribute(:server, { name: @server.name, id: @server.id })
       end
 
       def import

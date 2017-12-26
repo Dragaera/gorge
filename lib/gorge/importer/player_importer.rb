@@ -3,13 +3,15 @@ module Gorge
     class PlayerImporter
       PLAYER_IMPORT_BATCH_SIZE = 10_000
 
-      def initialize(source_db:)
+      def initialize(source_db:, server:)
         @source_db = source_db
+        @server = server
 
         @target_db = DB
 
         @l = Gorge.logger(program: 'importer')
         @l.module = 'players'
+        @l.add_attribute(:server, { name: @server.name, id: @server.id })
       end
 
       def import

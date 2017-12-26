@@ -14,16 +14,26 @@ module Gorge
       @logger.level = level
 
       @logger.formatter = proc do |severity, dt, _, message|
+        msg = message.dup
+        if msg.is_a? Hash
+          msg.merge! @attributes
+        elsif msg.is_a? String
+          attr_string = @attributes.map { |k, v| "#{ k } = #{ v }" }.join(', ')
+          msg = "#{ msg } (#{ attr_string })"
+        end
+
         JSON.dump(
           {
             time:     dt.iso8601,
             severity: severity,
             program:  [@program, @module].compact.join('/'),
-            message:  message,
+            message:  msg,
             pid:      Process.pid
           }
         ) + "\n"
       end
+
+      @attributes = {}
     end
 
     def module=(val)
@@ -52,6 +62,14 @@ module Gorge
 
     def unknown(msg)
       @logger.unknown(msg)
+    end
+
+    def add_attribute(key, val)
+      @attributes[key] = val
+    end
+
+    def remove_attribute(key)
+      @attributes.delete key
     end
   end
 end

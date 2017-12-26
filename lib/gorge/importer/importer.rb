@@ -8,7 +8,7 @@ module Gorge
         @server = server
 
         @round_importer  = RoundImporter.new(source_db: @source_db, server: server)
-        @player_importer = PlayerImporter.new(source_db: @source_db)
+        @player_importer = PlayerImporter.new(source_db: @source_db, server: server)
       end
 
       def import
