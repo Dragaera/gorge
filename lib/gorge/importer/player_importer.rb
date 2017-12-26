@@ -1,21 +1,15 @@
 module Gorge
   module Importer
-    class PlayerImporter
+    class PlayerImporter < BaseImporter
       PLAYER_IMPORT_BATCH_SIZE = 10_000
 
-      def initialize(source_db:, server:)
-        @source_db = source_db
-        @server = server
+      def initialize(*args, **kwargs)
+        super(*args, **kwargs)
 
-        @target_db = DB
-
-        @l = Gorge.logger(program: 'importer')
         @l.module = 'players'
-        @l.add_attribute(:server, { name: @server.name, id: @server.id })
       end
 
       def import
-        player_round_stats = @source_db.from(:PlayerRoundStats)
         player_id_count = player_round_stats.distinct.select(:steamId).count
 
         total_batch_count = (player_id_count.to_f / PLAYER_IMPORT_BATCH_SIZE).ceil
@@ -42,8 +36,6 @@ module Gorge
       def new_player_ids_in_source
         return enum_for(:new_player_ids_in_source) unless block_given?
 
-        player_round_stats = @source_db.from(:PlayerRoundStats)
-
         player_round_stats.distinct.select(:steamId).each_page(PLAYER_IMPORT_BATCH_SIZE) do |id_ds|
           new_ids_in_batch = id_ds.map { |hsh| hsh[:steamId] }
           existing_ids = Player.distinct.select(:steam_id).where(steam_id: new_ids_in_batch).map(&:steam_id)
@@ -51,6 +43,10 @@ module Gorge
 
           yield(new_ids_in_batch, existing_ids)
         end
+      end
+
+      def player_round_stats
+        @source_db.from(:PlayerRoundStats)
       end
     end
   end

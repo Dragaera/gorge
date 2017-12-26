@@ -2,18 +2,13 @@ require 'set'
 
 module Gorge
   module Importer
-    class RoundImporter
+    class RoundImporter < BaseImporter
       ROUND_IMPORT_BATCH_SIZE = 10_000
 
-      def initialize(source_db:, server:)
-        @server = server
-        @source_db = source_db
+      def initialize(*args, **kwargs)
+        super(*args, **kwargs)
 
-        @target_db = DB
-
-        @l = Gorge.logger(program: 'importer')
         @l.module = 'rounds'
-        @l.add_attribute(:server, { name: @server.name, id: @server.id })
       end
 
       def import
