@@ -61,7 +61,7 @@ Sequel.migration do
 
       Integer :score, null: false
 
-      index [:player_id, :round_id, :team_id], unique: true
+      index [:round_id, :player_id, :team_id], unique: true
     end
   end
 
