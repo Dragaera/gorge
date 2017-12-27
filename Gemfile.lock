@@ -1,9 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    coderay (1.1.2)
     dotenv (2.2.1)
+    method_source (0.9.0)
     pg (0.21.0)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     rake (12.3.0)
+    ruby-prof (0.16.2)
     sequel (5.3.0)
     sequel_pg (1.8.1)
       pg (>= 0.18.0)
@@ -16,7 +22,9 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   pg
+  pry
   rake
+  ruby-prof
   sequel
   sequel_pg
   sqlite3

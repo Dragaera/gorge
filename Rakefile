@@ -1,6 +1,11 @@
 namespace :db do
   desc "Run migrations"
   task :migrate, [:version] do |t, args|
+    # Don't load models when executing DB migrations.
+    # This is required, since some of the tables they refer to might not exist
+    # yet. It also prevents accidentally using them within migrations - which
+    # is asking for trouble anyway.
+    ENV['GORGE_SKIP_MODELS'] = '1'
     require 'config/boot'
 
     Sequel.extension :migration

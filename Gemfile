@@ -9,4 +9,6 @@ gem 'rake'
 
 group :development do
   gem 'dotenv'
+  gem 'pry'
+  gem 'ruby-prof'
 end
