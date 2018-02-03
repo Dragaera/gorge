@@ -7,6 +7,8 @@ gem 'sqlite3'
 
 gem 'rake'
 
+gem 'warning'
+
 group :development do
   gem 'pry'
   gem 'ruby-prof'
