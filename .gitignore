@@ -1,1 +1,4 @@
 .env*
+
+# RSpec profiling data
+spec/examples.txt

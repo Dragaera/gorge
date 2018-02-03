@@ -11,3 +11,11 @@ services:
       - gorge-dev
     ports:
       - 15432:5432
+
+  database-testing:
+    image: 'postgres:9.6'
+    env_file: .env.testing
+    networks:
+      - gorge-dev
+    ports:
+      - 15433:5432

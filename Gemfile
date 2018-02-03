@@ -12,3 +12,7 @@ group :development do
   gem 'pry'
   gem 'ruby-prof'
 end
+
+group :testing do
+  gem 'rspec'
+end
