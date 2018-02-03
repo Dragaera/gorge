@@ -1,7 +1,5 @@
 # coding: utf-8
 
-$LOAD_PATH.unshift *['.', 'lib']
-
 require 'config/boot'
 
 # ['Apheriox', 'The Thirsty Onos', 'Hashtagawesome', 'Diamondgamers'].each { |n| Gorge::Server.create(name: n ) }

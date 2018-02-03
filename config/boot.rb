@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift 'lib'
+
 APPLICATION_ENV = ENV.fetch('APPLICATION_ENV', 'development')
 
 require 'bundler'

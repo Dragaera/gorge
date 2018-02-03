@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift '.'
+
 namespace :db do
   desc "Run migrations"
   task :migrate, [:version] do |t, args|
