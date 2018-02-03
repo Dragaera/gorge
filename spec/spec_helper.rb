@@ -1,3 +1,10 @@
+$LOAD_PATH.unshift '.'
+
+ENV['APPLICATION_ENV'] = 'testing'
+
+require 'config/boot'
+require 'helpers'
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # RSpec 4
@@ -29,4 +36,17 @@ RSpec.configure do |config|
   config.order = :random
   # Allow specifying seed
   Kernel.srand config.seed
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation, except: ['teams'])
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+
+  config.include Gorge::Helpers::DatabaseHelpers
 end

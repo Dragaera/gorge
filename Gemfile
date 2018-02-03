@@ -8,11 +8,15 @@ gem 'sqlite3'
 gem 'rake'
 
 group :development do
-  gem 'dotenv'
   gem 'pry'
   gem 'ruby-prof'
 end
 
+group :development, :testing do
+  gem 'dotenv'
+end
+
 group :testing do
   gem 'rspec'
+  gem 'database_cleaner'
 end
