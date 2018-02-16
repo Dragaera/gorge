@@ -40,6 +40,7 @@ module Gorge
         end
 
         populate_rounds(db)
+        populate_player_rounds(db)
 
         db
       end
@@ -61,6 +62,27 @@ module Gorge
             [3, '2017-01-01 03:00:00', 10, 11, 0, 1],
             [4, '2017-01-01 04:00:00', 12, 12, 0, 0],
             [5, '2017-01-01 05:00:00', 12, 12, 1, 1],
+          ]
+        )
+      end
+
+      def populate_player_rounds(db)
+        db[:PlayerRoundStats].import(
+          [
+            :roundId,
+            :steamId,
+            :teamNumber,
+          ],
+          [
+            [1, 100, 1],
+            [1, 101, 1],
+            [1, 102, 2],
+            [1, 103, 2],
+
+            [2, 104, 1],
+            [2, 101, 1],
+            [2, 102, 2],
+            [2, 103, 2],
           ]
         )
       end
