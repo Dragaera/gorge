@@ -50,3 +50,5 @@ RSpec.configure do |config|
 
   config.include Gorge::Helpers::DatabaseHelpers
 end
+
+Gorge.default_logger_cls = Gorge::NullLogger
