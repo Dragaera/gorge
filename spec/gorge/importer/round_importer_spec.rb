@@ -1,7 +1,7 @@
 module Gorge
   module Importer
     RSpec.describe RoundImporter do
-      let(:server) { Gorge::Server.create(name: 'foo') }
+      let(:server) { create(:server) }
       subject { RoundImporter.new(server: server, source_db: ns2plus_database) }
 
       describe 'importing from a database' do

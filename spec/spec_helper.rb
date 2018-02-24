@@ -6,6 +6,8 @@ require 'config/boot'
 require 'helpers'
 
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+
   config.expect_with :rspec do |expectations|
     # RSpec 4
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -38,6 +40,8 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.before(:suite) do
+    FactoryBot.find_definitions
+
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation, except: ['teams'])
   end

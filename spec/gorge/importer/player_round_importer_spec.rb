@@ -1,25 +1,17 @@
 module Gorge
   module Importer
     RSpec.describe PlayerRoundImporter do
-      let(:server) { Gorge::Server.create(name: 'foo') }
+      let(:server) { create(:server) }
       subject { PlayerRoundImporter.new(server: server, source_db: ns2plus_database) }
 
       describe 'importing from a database' do
         before(:each) do
           [100, 101, 102, 103, 104].each do |steam_id|
-            Player.create(steam_id: steam_id)
+            create(:player, steam_id: steam_id)
           end
 
           [1, 2].each do |round_id|
-            Round.create(
-              round_id: round_id,
-              timestamp: Time.now,
-              max_players_marines: 2,
-              max_players_aliens: 2,
-              tournament_mode: false,
-              winning_team_id: 1,
-              server_id: server.id,
-            )
+            create(:round, round_id: round_id, server: server)
           end
         end
 
@@ -49,7 +41,7 @@ module Gorge
               round:  round,
             )
           ).to eq(
-            PlayerRound.new(
+            build(:player_round,
               player: player,
               round: round,
               team: Team.marines,
