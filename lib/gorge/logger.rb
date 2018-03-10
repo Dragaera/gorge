@@ -2,10 +2,6 @@ require 'json'
 require 'logger'
 
 module Gorge
-  def self.logger(*args, **kwargs)
-    StructuredLogger.new(*args, **kwargs)
-  end
-
   class StructuredLogger
     def initialize(level: :debug, program: 'gorge')
       @program = program
@@ -71,5 +67,35 @@ module Gorge
     def remove_attribute(key)
       @attributes.delete key
     end
+  end
+
+  class NullLogger < StructuredLogger
+    def debug(msg)
+    end
+
+    def info(msg)
+    end
+
+    def warn(msg)
+    end
+
+    def error(msg)
+    end
+
+    def fatal(msg)
+    end
+
+    def unknown(msg)
+    end
+  end
+
+
+  @default_logger_cls = StructuredLogger
+  def self.default_logger_cls=(cls)
+    @default_logger_cls = cls
+  end
+
+  def self.logger(*args, **kwargs)
+    @default_logger_cls.new(*args, **kwargs)
   end
 end

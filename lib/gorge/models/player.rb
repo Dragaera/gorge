@@ -4,50 +4,68 @@ module Gorge
   class Player < Sequel::Model
     one_to_many :player_rounds
 
-    def accuracy
-      rslt = player_rounds_dataset.
-        where(team_id: 1).
-        select {
-          [
-            sum(hits).as(marine_hits),
-            sum(onos_hits).as(marine_onos_hits),
-            sum(misses).as(marine_misses)
-          ]
-        }.
-        first
-      marine_hits = rslt[:marine_hits]
-      marine_onos_hits = rslt[:marine_onos_hits]
-      marine_misses = rslt[:marine_misses]
-      marine_shots = marine_hits + marine_misses
-
-      rslt = player_rounds_dataset.
-        where(team_id: 2).
-        select {
-          [
-            sum(hits).as(alien_hits),
-            sum(misses).as(alien_misses)
-          ]
-        }.
-        first
-      alien_hits = rslt[:alien_hits]
-      alien_misses = rslt[:alien_misses]
-      alien_shots = alien_hits + alien_misses
-
-      {
-        marine_total: marine_hits / marine_shots.to_f,
-        marine_noonos: (marine_hits - marine_onos_hits) / (marine_shots.to_f - marine_onos_hits),
-        alien: alien_hits / alien_shots.to_f
-      }
+    def alien_rounds_dataset
+      player_rounds_dataset.where(team: Team.aliens)
     end
 
-    def kdr(team: :both)
-      if team == :both
-        player_rounds_dataset.sum(:kills).to_f / player_rounds_dataset.sum(:deaths)
-      elsif team == :marines
-        player_rounds_dataset.where(team_id: 1).sum(:kills).to_f / player_rounds_dataset.where(team_id: 1).sum(:deaths)
-      elsif team == :aliens
-        player_rounds_dataset.where(team_id: 2).sum(:kills).to_f / player_rounds_dataset.where(team_id: 2).sum(:deaths)
+    def marine_rounds_dataset
+      player_rounds_dataset.where(team: Team.marines)
+    end
+
+    # @return [Float] Overall accuracy.
+    def accuracy
+      player_rounds_dataset.
+        select_map {
+          sum(hits).cast(:float) / (sum(hits) + sum(misses))
+      }.first
+    end
+
+    # @return [Float] Alien accuracy.
+    def alien_accuracy
+      alien_rounds_dataset.
+        select_map {
+          sum(hits).cast(:float) / (sum(hits) + sum(misses))
+      }.first
+    end
+
+    # @param [TrueClass] include_onos Whether to include onos hits in accuracy.
+    # @return [Float] Marine accuracy.
+    def marine_accuracy(include_onos: true)
+      if include_onos
+        marine_rounds_dataset.
+          select_map {
+            sum(hits).cast(:float) / (sum(hits) + sum(misses))
+        }.first
+      else
+        marine_rounds_dataset.
+          select_map {
+            (sum(hits).cast(:float) - sum(onos_hits)) / (sum(hits) - sum(onos_hits) + sum(misses))
+        }.first
       end
+    end
+
+    # @return [Float] Overall KDR.
+    def kdr
+      player_rounds_dataset.
+        select_map {
+          sum(kills).cast(:float) / sum(deaths)
+      }.first
+    end
+
+    # @return [Float] Alien KDR.
+    def alien_kdr
+      alien_rounds_dataset.
+        select_map {
+          sum(kills).cast(:float) / sum(deaths)
+      }.first
+    end
+
+    # @return [Float] Marine KDR.
+    def marine_kdr
+      marine_rounds_dataset.
+        select_map {
+        sum(kills).cast(:float) / sum(deaths)
+      }.first
     end
   end
 end
