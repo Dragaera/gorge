@@ -14,67 +14,58 @@ module Gorge
 
     # @return [Float] Overall accuracy.
     def accuracy
-      result = player_rounds_dataset.
-        select {
-          [
-            sum(hits).as(hits),
-            sum(misses).as(misses)
-          ]
-        }.first
-
-      shots = result[:hits] + result[:misses]
-      result[:hits] / shots.to_f
+      player_rounds_dataset.
+        select_map {
+          sum(hits).cast(:float) / (sum(hits) + sum(misses))
+      }.first
     end
 
     # @return [Float] Alien accuracy.
     def alien_accuracy
-      result = alien_rounds_dataset.
-        select {
-          [
-            sum(hits).as(hits),
-            sum(misses).as(misses)
-          ]
-        }.first
-
-      shots = result[:hits] + result[:misses]
-      result[:hits] / shots.to_f
+      alien_rounds_dataset.
+        select_map {
+          sum(hits).cast(:float) / (sum(hits) + sum(misses))
+      }.first
     end
 
     # @param [TrueClass] include_onos Whether to include onos hits in accuracy.
     # @return [Float] Marine accuracy.
     def marine_accuracy(include_onos: true)
-      result = marine_rounds_dataset.
-        select {
-          [
-            sum(hits).as(hits),
-            sum(onos_hits).as(onos_hits),
-            sum(misses).as(misses)
-          ]
-        }.first
-
-      hits  = result[:hits]
-      shots = hits + result[:misses]
-
       if include_onos
-        hits / shots.to_f
+        marine_rounds_dataset.
+          select_map {
+            sum(hits).cast(:float) / (sum(hits) + sum(misses))
+        }.first
       else
-        (hits - result[:onos_hits]) / (shots.to_f - result[:onos_hits])
+        marine_rounds_dataset.
+          select_map {
+            (sum(hits).cast(:float) - sum(onos_hits)) / (sum(hits) - sum(onos_hits) + sum(misses))
+        }.first
       end
     end
 
     # @return [Float] Overall KDR.
     def kdr
-      player_rounds_dataset.sum(:kills).to_f / player_rounds_dataset.sum(:deaths)
+      player_rounds_dataset.
+        select_map {
+          sum(kills).cast(:float) / sum(deaths)
+      }.first
     end
 
     # @return [Float] Alien KDR.
     def alien_kdr
-      alien_rounds_dataset.sum(:kills).to_f / alien_rounds_dataset.sum(:deaths)
+      alien_rounds_dataset.
+        select_map {
+          sum(kills).cast(:float) / sum(deaths)
+      }.first
     end
 
     # @return [Float] Marine KDR.
     def marine_kdr
-      marine_rounds_dataset.sum(:kills).to_f / marine_rounds_dataset.sum(:deaths)
+      marine_rounds_dataset.
+        select_map {
+        sum(kills).cast(:float) / sum(deaths)
+      }.first
     end
   end
 end
