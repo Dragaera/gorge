@@ -45,6 +45,7 @@ GEM
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     warning (0.10.1)
+    yard (0.9.9)
 
 PLATFORMS
   ruby
@@ -62,6 +63,7 @@ DEPENDENCIES
   sequel_pg
   sqlite3
   warning
+  yard
 
 BUNDLED WITH
    1.14.5

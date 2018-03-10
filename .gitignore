@@ -2,3 +2,6 @@
 
 # RSpec profiling data
 spec/examples.txt
+
+# YARD
+.yardoc/
