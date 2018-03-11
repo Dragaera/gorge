@@ -7,6 +7,7 @@ require 'helpers'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+  config.include Rack::Test::Methods
 
   config.expect_with :rspec do |expectations|
     # RSpec 4
@@ -50,6 +51,10 @@ RSpec.configure do |config|
     DatabaseCleaner.cleaning do
       example.run
     end
+  end
+
+  def app
+    Gorge::Web::API.new
   end
 
   config.include Gorge::Helpers::DatabaseHelpers

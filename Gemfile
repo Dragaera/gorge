@@ -26,6 +26,7 @@ end
 
 group :testing do
   gem 'rspec'
+  gem 'rack-test'
   gem 'database_cleaner'
   gem 'factory_bot'
 end
