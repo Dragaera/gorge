@@ -3,8 +3,14 @@
 module Gorge
   module Web
     class API < Grape::API
-      logger.formatter = GrapeLogging::Formatters::Json.new
-      use GrapeLogging::Middleware::RequestLogger, { logger: logger }
+      logger Gorge.logger(program: 'api', module_: 'players')
+      use GrapeLogging::Middleware::RequestLogger, { logger: Gorge.logger(program: 'api', module_: 'requests') }
+
+      helpers do
+        def logger
+          API.logger
+        end
+      end
 
       format :json
 
