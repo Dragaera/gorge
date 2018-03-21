@@ -2,6 +2,14 @@ $LOAD_PATH.unshift '.'
 
 ENV['APPLICATION_ENV'] = 'testing'
 
+# Ugly, but we have to ensure it's set before the rest of the application is loaded, as:
+# - some loggers (`config/database.rb`) are defined in the top-level of a file
+# - some loggers (`lib/gorge/web/*`) are defined on class-level
+# and will therefore be evaluated upon the file being required - at which point
+# we would have had no chance to set the default logger.
+require 'gorge/logger'
+Gorge.default_logger_cls = Gorge::NullLogger
+
 require 'config/boot'
 require 'helpers'
 
@@ -59,5 +67,3 @@ RSpec.configure do |config|
 
   config.include Gorge::Helpers::DatabaseHelpers
 end
-
-Gorge.default_logger_cls = Gorge::NullLogger
