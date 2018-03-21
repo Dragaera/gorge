@@ -3,8 +3,9 @@ require 'logger'
 
 module Gorge
   class StructuredLogger
-    def initialize(level: :debug, program: 'gorge')
+    def initialize(level: :debug, program: 'gorge', module_: nil)
       @program = program
+      @module  = module_
 
       @logger       = Logger.new(STDOUT)
       @logger.level = level
