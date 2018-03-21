@@ -5,6 +5,11 @@ gem 'pg'
 gem 'sequel_pg', require: 'sequel'
 gem 'sqlite3'
 
+gem 'grape'
+gem 'grape_logging'
+gem 'puma'
+gem 'shotgun'
+
 gem 'rake'
 
 gem 'warning'
@@ -21,6 +26,7 @@ end
 
 group :testing do
   gem 'rspec'
+  gem 'rack-test'
   gem 'database_cleaner'
   gem 'factory_bot'
 end
