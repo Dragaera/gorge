@@ -10,13 +10,15 @@ namespace :db do
     ENV['GORGE_SKIP_MODELS'] = '1'
     require 'config/boot'
 
+    logger = Gorge.logger(program: 'migrations')
+
     Sequel.extension :migration
     db = Sequel::Model.db
     if args[:version]
-      puts "Migrating to version #{args[:version]}"
+      logger.info "Migrating to version #{args[:version]}"
       Sequel::Migrator.run(db, "db/migrations", target: args[:version].to_i)
     else
-      puts "Migrating to latest"
+      logger.info "Migrating to latest"
       Sequel::Migrator.run(db, "db/migrations")
     end
   end
