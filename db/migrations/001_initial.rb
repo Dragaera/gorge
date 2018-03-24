@@ -18,8 +18,8 @@ Sequel.migration do
     create_table :rounds do
       primary_key :id
 
-      foreign_key :server_id, :servers, null: false, on_update: :cascade, on_delete: :cascade
-      foreign_key :winning_team_id, :teams, null: false, on_update: :cascade, on_delete: :restrict
+      foreign_key :server_id,       :servers, null: false, on_update: :cascade, on_delete: :cascade
+      foreign_key :winning_team_id, :teams,   null: false, on_update: :cascade, on_delete: :restrict
 
       Integer  :round_id,            null: false
       DateTime :timestamp,           null: false
