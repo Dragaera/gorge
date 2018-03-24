@@ -1,5 +1,12 @@
 $LOAD_PATH.unshift '.'
 
+namespace :gorge do
+  desc 'Spawns an interactive console'
+  task :console do |t|
+    exec 'bundle exec pry -I. -r config/boot'
+  end
+end
+
 namespace :db do
   desc "Run migrations"
   task :migrate, [:version] do |t, args|
