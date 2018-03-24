@@ -5,6 +5,8 @@ gem 'pg'
 gem 'sequel_pg', require: 'sequel'
 gem 'sqlite3'
 
+gem 'typhoeus'
+
 gem 'grape'
 gem 'grape_logging'
 gem 'puma'

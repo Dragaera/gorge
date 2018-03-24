@@ -19,3 +19,5 @@ unless ENV['GORGE_SKIP_MODELS'] == '1'
   # Has to be loaded after DB is ready.
   require 'gorge/models'
 end
+
+Typhoeus::Config.user_agent = 'Gorge (https://github.com/Dragaera/gorge)'
