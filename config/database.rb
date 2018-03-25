@@ -10,8 +10,15 @@ opts[:logger]   = Gorge.logger(program: 'sequel')
 
 STDOUT.sync = true
 
-DB = Sequel.connect(opts)
+# Needs to be loaded when `pg_enum` extension is loaded, for its methods to be
+# available directly within migration blocks.
+Sequel.extension :migration
 Sequel::Database.extension(:pagination)
+
+DB = Sequel.connect(opts)
+# We only want to load this for our main (Postgres) database, and *not* for all
+# databases, as they might be SQLite ones in case of importers.
+DB.extension(:pg_enum)
 Sequel::Model.db = DB
 
 begin
