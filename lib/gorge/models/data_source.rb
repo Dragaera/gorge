@@ -7,18 +7,25 @@ module Gorge
     one_to_many :data_source_updates
     many_to_one :current_update, class: :'Gorge::DataSourceUpdate', key: :current_update_id
 
-    def process
+    def process(async: false)
       @logger = Gorge.logger(program: 'gorge', module_: 'data_source_processing')
       @logger.add_attribute(:name, name)
       @logger.add_attribute(:server, server.name)
 
-      @logger.debug({ msg: 'Starting processing' })
+      @logger.debug({ msg: 'Starting data source processing' })
 
       update(
         current_update: create_data_source_update
       )
 
-      fetch_data
+      if fetch_data
+        if process_data
+          @logger.debug({ msg: 'Processing finished' })
+          current_update.update(
+            state: :success
+          )
+        end
+      end
     end
 
     private
@@ -82,6 +89,24 @@ module Gorge
       raise
     end
 
+    def process_data
+      @logger.add_attribute(:file_path, current_update.file_path)
+
+      current_update.update(
+        state: :processing
+      )
+
+      importer = Importer::Importer.new(current_update.file_path, server: server)
+      importer.import
+
+      @logger.remove_attribute :file_path
+
+      true
+    rescue Exception => e
+      processing_exception(e)
+      raise
+    end
+
     def download_success(time_taken, file_path)
       @logger.debug({ msg: 'Sucessfully downloaded', download_time: time_taken })
       current_update.update(
@@ -107,6 +132,16 @@ module Gorge
       @logger.error({ msg: msg })
       current_update.update(
         state: :failed,
+        error_message: msg
+      )
+
+      false
+    end
+
+    def processing_exception(e)
+      msg = "Unhandled #{ e.class } while processing: #{ e.message }"
+      current_update.update(
+        state: :processing_failed,
         error_message: msg
       )
 
