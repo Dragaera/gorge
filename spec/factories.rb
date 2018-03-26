@@ -40,5 +40,12 @@ module Gorge
       structure_damage 3_000
       score 100
     end
+
+    factory :data_source, class: Gorge::DataSource do
+      name 'data_source'
+      url 'http://localhost/foo'
+      server
+      update_frequency { Gorge::UpdateFrequency.first }
+    end
   end
 end

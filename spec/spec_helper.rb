@@ -52,7 +52,7 @@ RSpec.configure do |config|
     FactoryBot.find_definitions
 
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation, except: ['teams'])
+    DatabaseCleaner.clean_with(:truncation, except: ['teams', 'update_frequencies'])
   end
 
   config.around(:each) do |example|

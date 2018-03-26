@@ -16,12 +16,14 @@ Sequel.migration do
       foreign_key :server_id,           :servers,             null: false, on_update: :cascade, on_delete: :cascade
       foreign_key :update_frequency_id, :update_frequencies,  null: false, on_update: :cascade, on_delete: :restrict
 
-      String   :name,    null: false, unique: true
+      String   :name,    null: false
       String   :url,     null: false
       DateTime :last_update_at
       DateTime :next_update_at
       DateTime :update_scheduled_at
-      Bool     :enabled,             null: false, default: true
+      Bool     :enabled, null: false, default: true
+
+      unique [:server_id, :name]
     end
 
     create_enum(:data_source_update_state, ['scheduled', 'downloading', 'downloading_failed', 'processing', 'processing_failed', 'success', 'failed'])

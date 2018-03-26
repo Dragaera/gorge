@@ -28,6 +28,13 @@ module Gorge
       end
     end
 
+    def identifier
+      [
+        server.name,
+        name
+      ].join('_').gsub(/\s/, '_').downcase
+    end
+
     private
     def create_data_source_update
       add_data_source_update(
@@ -149,12 +156,8 @@ module Gorge
     end
 
     def output_file
-      file_name = [
-        server.name,
-        name,
-        Time.now.strftime('%Y%m%d_%H%M%S'),
-      ].join('_').downcase.gsub(/\s/, '_')
-      file_name << '.sqlite3'
+      ts = Time.now.strftime('%Y%m%d_%H%M%S')
+      file_name = "#{ identifier }_#{ ts }.sqlite3"
 
       path = File.join(Config::DataImport::STORAGE_PATH, file_name)
       File.open(path, 'wb')
