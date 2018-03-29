@@ -2,6 +2,7 @@ version: '3'
 
 networks:
   gorge-dev:
+  gorge-test:
 
 services:
   database:
@@ -16,6 +17,20 @@ services:
     image: 'postgres:9.6'
     env_file: .env.testing
     networks:
-      - gorge-dev
+      - gorge-test
     ports:
       - 15433:5432
+
+  redis:
+    image: 'redis:3'
+    networks:
+      - gorge-dev
+    ports:
+      - 16379:6379
+
+  redis-test:
+    image: 'redis:3'
+    networks:
+      - gorge-test
+    ports:
+      - 26379:6379

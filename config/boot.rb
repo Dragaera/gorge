@@ -14,6 +14,7 @@ require 'gorge'
 
 require 'config/gorge'
 require 'config/database'
+require 'config/resque'
 
 unless ENV['GORGE_SKIP_MODELS'] == '1'
   # Has to be loaded after DB is ready.

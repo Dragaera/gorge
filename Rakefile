@@ -1,5 +1,8 @@
 $LOAD_PATH.unshift '.'
 
+require 'resque/tasks'
+require 'resque/scheduler/tasks'
+
 namespace :gorge do
   desc 'Spawns an interactive console'
   task :console do |t|
