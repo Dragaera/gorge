@@ -82,5 +82,28 @@ module Gorge
         expect(subject.marine_accuracy(include_onos: false)).to be_within(0.01).of(0.537)
       end
     end
+
+    describe '#statistics' do
+      it 'returns a hash containing various statistics' do
+        expected = {
+          steam_id: subject.steam_id,
+          kdr: {
+            total:  subject.kdr,
+            alien:  subject.alien_kdr,
+            marine: subject.marine_kdr,
+          },
+          accuracy: {
+            total: subject.accuracy,
+            alien: subject.alien_accuracy,
+            marine: {
+              total:   subject.marine_accuracy,
+              no_onos: subject.marine_accuracy(include_onos: false),
+            }
+          }
+        }
+
+        expect(subject.statistics).to eq (expected)
+      end
+    end
   end
 end

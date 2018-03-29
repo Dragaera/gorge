@@ -25,24 +25,7 @@ module Gorge
             player = Player.first(steam_id: params[:steam_id])
 
             if player
-              {
-                steam_id: player.steam_id,
-
-                kdr: {
-                  total: player.kdr,
-                  alien: player.alien_kdr,
-                  marine: player.marine_kdr,
-                },
-
-                accuracy: {
-                  total: player.accuracy,
-                  alien: player.alien_accuracy,
-                  marine: {
-                    total: player.marine_accuracy,
-                    no_onos: player.marine_accuracy(include_onos: false),
-                  },
-                }
-              }
+              player.statistics
             else
               error! 'No such player', 404
             end

@@ -12,6 +12,51 @@ module Gorge
       player_rounds_dataset.where(team: Team.marines)
     end
 
+    # @return [Hash] Overall and per-team KDR and accuracy.
+    def statistics
+      total_stats = player_rounds_dataset.
+        select {
+          [
+            (sum(hits).cast(:float) / (sum(hits) + sum(misses))).as(accuracy),
+            (sum(kills).cast(:float) / sum(deaths)).as(kdr)
+          ]
+      }.first
+
+      alien_stats = alien_rounds_dataset.
+        select {
+          [
+            (sum(hits).cast(:float) / (sum(hits) + sum(misses))).as(accuracy),
+            (sum(kills).cast(:float) / sum(deaths)).as(kdr)
+          ]
+      }.first
+
+      marine_stats = marine_rounds_dataset.
+        select {
+          [
+            (sum(hits).cast(:float) / (sum(hits) + sum(misses))).as(accuracy),
+            ((sum(hits).cast(:float) - sum(onos_hits)) / (sum(hits) - sum(onos_hits) + sum(misses))).as(accuracy_no_onos),
+            (sum(kills).cast(:float) / sum(deaths)).as(kdr)
+          ]
+      }.first
+
+      {
+        steam_id: steam_id,
+        kdr: {
+          total:  total_stats[:kdr],
+          alien:  alien_stats[:kdr],
+          marine: marine_stats[:kdr],
+        },
+        accuracy: {
+          total: total_stats[:accuracy],
+          alien: alien_stats[:accuracy],
+          marine: {
+            total:   marine_stats[:accuracy],
+            no_onos: marine_stats[:accuracy_no_onos],
+          }
+        }
+      }
+    end
+
     # @return [Float] Overall accuracy.
     def accuracy
       player_rounds_dataset.
