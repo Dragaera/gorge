@@ -26,6 +26,9 @@ STDOUT.sync = true
 Sequel.extension :migration
 Sequel::Database.extension(:pagination)
 
+# Automated created at / updated at timestamps.
+Sequel::Model.plugin :timestamps
+
 DB = Gorge::Config::Database.database
 # We only want to load this for our main (Postgres) database, and *not* for all
 # databases, as they might be SQLite ones in case of importers.

@@ -40,7 +40,6 @@ module Gorge
       add_data_source_update(
         DataSourceUpdate.new(
           state:     :scheduled,
-          timestamp: Time.now,
           url:       url
         )
       )

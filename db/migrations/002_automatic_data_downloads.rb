@@ -6,6 +6,9 @@ Sequel.migration do
       String  :name,        null: false, unique: true
       Integer :interval,    null: false
       Bool    :auto_update, null: false, default: true
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
     end
     [['none', 0, false], ['daily', 24 * 60 * 60, true], ['weekly', 7 * 24 * 60 * 60, true]].each do |ary|
       from(:update_frequencies).insert(name: ary[0], interval: ary[1], auto_update: ary[2])
@@ -19,10 +22,13 @@ Sequel.migration do
 
       String   :name,    null: false
       String   :url,     null: false
-      DateTime :last_update_at
-      DateTime :next_update_at
-      DateTime :update_scheduled_at
+      Time :last_update_at
+      Time :next_update_at
+      Time :update_scheduled_at
       Bool     :enabled, null: false, default: true
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
 
       unique [:server_id, :name]
     end
@@ -39,7 +45,9 @@ Sequel.migration do
       String                   :error_message
       Integer                  :download_time
       Integer                  :processing_time
-      DateTime                 :timestamp
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
     end
 
     alter_table :data_sources do
