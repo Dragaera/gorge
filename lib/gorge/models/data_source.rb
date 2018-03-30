@@ -103,8 +103,12 @@ module Gorge
         state: :processing
       )
 
+      processing_started_at = Time.now
       importer = Importer::Importer.new(current_update.file_path, server: server)
       importer.import
+      current_update.update(
+        processing_time: Time.now - processing_started_at
+      )
 
       @logger.remove_attribute :file_path
 

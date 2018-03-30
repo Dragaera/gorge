@@ -3,11 +3,12 @@ Sequel.migration do
     create_table :update_frequencies do
       primary_key :id
 
-      String  :name,     null: false, unique: true
-      Integer :interval, null: false
+      String  :name,        null: false, unique: true
+      Integer :interval,    null: false
+      Bool    :auto_update, null: false, default: true
     end
-    [['daily', 24 * 60 * 60], ['weekly', 7 * 24 * 60 * 60]].each do |ary|
-      from(:update_frequencies).insert(name: ary[0], interval: ary[1])
+    [['none', 0, false], ['daily', 24 * 60 * 60, true], ['weekly', 7 * 24 * 60 * 60, true]].each do |ary|
+      from(:update_frequencies).insert(name: ary[0], interval: ary[1], auto_update: ary[2])
     end
 
     create_table :data_sources do
@@ -37,6 +38,7 @@ Sequel.migration do
       String                   :file_path
       String                   :error_message
       Integer                  :download_time
+      Integer                  :processing_time
       DateTime                 :timestamp
     end
 
