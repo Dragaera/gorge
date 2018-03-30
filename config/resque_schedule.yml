@@ -10,3 +10,9 @@ remove_downloaded_data_files:
   class: Gorge::Jobs::RemoveDownloadedDataFiles
   args:
   description: 'Remove downloaded data files exceeding a certain age.'
+
+reset_pending_updates:
+  cron: '* * * * *'
+  class: Gorge::Jobs::ResetPendingUpdates
+  args:
+  description: 'Reset the "update pending" status of data sources after a certain grace period.'
