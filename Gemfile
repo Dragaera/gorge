@@ -21,13 +21,13 @@ gem 'rake'
 gem 'warning'
 
 group :development do
-  gem 'pry'
   gem 'ruby-prof'
   gem 'yard'
 end
 
 group :development, :testing do
   gem 'dotenv'
+  gem 'pry'
 end
 
 group :testing do
