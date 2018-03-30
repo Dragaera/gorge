@@ -22,9 +22,10 @@ Sequel.migration do
 
       String   :name,    null: false
       String   :url,     null: false
-      Time :last_update_at
-      Time :next_update_at
-      Time :update_scheduled_at
+      Time     :last_update_at
+      Time     :next_update_at
+      Time     :update_scheduled_at
+      Fixnum   :error_count, null: false, default: 0
       Bool     :enabled, null: false, default: true
 
       Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP

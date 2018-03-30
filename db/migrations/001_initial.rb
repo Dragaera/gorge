@@ -27,11 +27,11 @@ Sequel.migration do
       foreign_key :server_id,       :servers, null: false, on_update: :cascade, on_delete: :cascade
       foreign_key :winning_team_id, :teams,   null: false, on_update: :cascade, on_delete: :restrict
 
-      Integer  :round_id,            null: false
-      Time :timestamp,           null: false
-      Integer  :max_players_marines, null: false
-      Integer  :max_players_aliens,  null: false
-      Bool     :tournament_mode,     null: false
+      Integer :round_id,            null: false
+      Time    :timestamp,           null: false
+      Integer :max_players_marines, null: false
+      Integer :max_players_aliens,  null: false
+      Bool    :tournament_mode,     null: false
 
       Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
       Time :updated_at

@@ -7,7 +7,23 @@ module Gorge
     one_to_many :data_source_updates
     many_to_one :current_update, class: :'Gorge::DataSourceUpdate', key: :current_update_id
 
-    def process(async: false)
+    def self.stale
+      dataset.
+        where(enabled: true, update_scheduled_at: nil).
+        where { next_update_at < Time.now }.
+        to_a.
+        select { |ds| ds.update_frequency.auto_update }
+    end
+
+    def async_process
+      update(
+        update_scheduled_at: Time.now
+      )
+
+      Resque.enqueue(Jobs::UpdateDataSource, id)
+    end
+
+    def process
       @logger = Gorge.logger(program: 'gorge', module_: 'data_source_processing')
       @logger.add_attribute(:name, name)
       @logger.add_attribute(:server, server.name)
@@ -18,12 +34,38 @@ module Gorge
         current_update: create_data_source_update
       )
 
-      if fetch_data
-        if process_data
-          @logger.debug({ msg: 'Processing finished' })
-          current_update.update(
-            state: :success
-          )
+      if fetch_data && process_data
+        @logger.debug({ msg: 'Processing finished' })
+        next_update_ts = if next_update_at <= Time.now
+                           # We'll set the next update based on when the current update should
+                           # have started, to prevent it from slowly drifting forward due to the
+                           # time it takes to download and process the data.
+                           (next_update_at || Time.now) + update_frequency.interval
+                         else
+                           # Prevent pushing next_update_at further and further
+                           # if `#process` was called too early, eg due to
+                           # manual intervention.
+                           next_update_at
+                         end
+        update(
+          last_update_at:      Time.now,
+          next_update_at:      next_update_ts,
+          update_scheduled_at: nil,
+          error_count: 0,
+        )
+
+        current_update.update(
+          state: :success,
+        )
+      else
+        update(
+          update_scheduled_at: nil,
+          error_count: error_count + 1
+        )
+
+        if error_count >= Gorge::Config::DataImport::ERROR_THRESHOLD
+          @logger.warn({ msg: 'Disabling data source due to exceeding error count.' })
+          update(enabled: false)
         end
       end
     end
@@ -92,7 +134,8 @@ module Gorge
     rescue Exception => e
       buffer.close if buffer
       download_exception(e)
-      raise
+
+      false
     end
 
     def process_data
@@ -114,7 +157,8 @@ module Gorge
       true
     rescue Exception => e
       processing_exception(e)
-      raise
+
+      false
     end
 
     def download_success(time_taken, file_path)

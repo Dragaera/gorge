@@ -3,10 +3,18 @@ $LOAD_PATH.unshift '.'
 require 'resque/tasks'
 require 'resque/scheduler/tasks'
 
+task 'resque:setup' => 'gorge:environment'
+task 'resque:scheduler' => 'resque:setup'
+
 namespace :gorge do
   desc 'Spawns an interactive console'
   task :console do |t|
     exec 'bundle exec pry -I. -r config/boot'
+  end
+
+  desc 'Setup environment'
+  task :environment do
+    require 'config/boot'
   end
 end
 

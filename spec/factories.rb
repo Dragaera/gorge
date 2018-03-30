@@ -45,7 +45,7 @@ module Gorge
       name 'data_source'
       url 'http://localhost/foo'
       server
-      update_frequency { Gorge::UpdateFrequency.first }
+      update_frequency { Gorge::UpdateFrequency.first(auto_update: true) }
     end
   end
 end

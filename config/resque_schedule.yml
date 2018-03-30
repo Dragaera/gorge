@@ -1,8 +1,7 @@
 ---
-{}
-# some_job:
-#   cron: '* * * * *'
-#   class: 'Foo:Bar'
-#   queue: some_queue
-#   args:
-#   description: 'Do something in the background. None will know.'
+schedule_data_source_updates:
+  cron: '* * * * *'
+  class: Gorge::Jobs::ScheduleDataSourceUpdates
+  queue: schedule_data_source_updates
+  args:
+  description: 'Schedule updates of data sources which are in need of one.'

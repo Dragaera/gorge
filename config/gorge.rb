@@ -15,12 +15,14 @@ module Gorge
     end
 
     module Resque
-      WEB_PATH = ENV['RESQUE_WEB_PATH']
+      WEB_PATH           = ENV['RESQUE_WEB_PATH']
+      DURATIONS_RECORDED = ENV.fetch('RESQUE_DURATIONS_RECORDED', 10_000).to_i
     end
 
     module DataImport
       STORAGE_PATH         = ENV.fetch('DATA_IMPORT_STORAGE_PATH')
       HTTP_CONNECT_TIMEOUT = ENV.fetch('DATA_IMPORT_HTTP_CONNECT_TIMEOUT', 30).to_i
+      ERROR_THRESHOLD      = ENV.fetch('DATA_IMPORT_ERROR_THRESHOLD', 5).to_i
     end
   end
 end
