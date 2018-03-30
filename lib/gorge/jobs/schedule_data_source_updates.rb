@@ -12,6 +12,7 @@ module Gorge
       @logger = Gorge.logger(program: 'schedule_data_source_updates')
 
       def self.perform
+        @logger.info('Checking for stale data sources.')
         DataSource.stale.each do |ds|
           @logger.info({ msg: 'Scheduling update for stale data source.', data_source: ds.identifier })
           ds.async_process

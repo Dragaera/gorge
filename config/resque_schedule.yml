@@ -2,6 +2,11 @@
 schedule_data_source_updates:
   cron: '* * * * *'
   class: Gorge::Jobs::ScheduleDataSourceUpdates
-  queue: schedule_data_source_updates
   args:
   description: 'Schedule updates of data sources which are in need of one.'
+
+remove_downloaded_data_files:
+  cron: '* * * * *'
+  class: Gorge::Jobs::RemoveDownloadedDataFiles
+  args:
+  description: 'Remove downloaded data files exceeding a certain age.'

@@ -20,9 +20,10 @@ module Gorge
     end
 
     module DataImport
-      STORAGE_PATH         = ENV.fetch('DATA_IMPORT_STORAGE_PATH')
-      HTTP_CONNECT_TIMEOUT = ENV.fetch('DATA_IMPORT_HTTP_CONNECT_TIMEOUT', 30).to_i
-      ERROR_THRESHOLD      = ENV.fetch('DATA_IMPORT_ERROR_THRESHOLD', 5).to_i
+      STORAGE_PATH             = ENV.fetch('DATA_IMPORT_STORAGE_PATH')
+      HTTP_CONNECT_TIMEOUT     = ENV.fetch('DATA_IMPORT_HTTP_CONNECT_TIMEOUT', 30).to_i
+      ERROR_THRESHOLD          = ENV.fetch('DATA_IMPORT_ERROR_THRESHOLD', 5).to_i
+      DATA_FILE_RETENTION_TIME = ENV.fetch('DATA_IMPORT_DATA_FILE_RETENTION_TIME', 7 * 24 * 60 * 60).to_i
     end
   end
 end
