@@ -32,6 +32,39 @@ namespace :db do
       Sequel::Migrator.run(db, "db/migrations")
     end
   end
+
+  desc 'Drop and recreate database'
+  task :recreate do |t|
+    ENV['GORGE_SKIP_MODELS'] = '1'
+    require 'config/boot'
+
+    logger = Gorge.logger(program: 'migrations')
+
+    application_db = Gorge::Config::Database::DATABASE
+    # Reassigning a constant is a bit ugly - but less ugly than duplicating
+    # `config/database.rb` for the purpose of getting a DB instance to work
+    # with.
+    Gorge::Config::Database::DATABASE = 'postgres'
+    db = Gorge::Config::Database.database
+
+    # Terminate existing connnections.
+    Sequel::Model.db.disconnect
+    logger.info "Resetting database #{ application_db }"
+    db.execute("DROP DATABASE #{ application_db }")
+    db.execute("CREATE DATABASE #{ application_db }")
+  end
+
+  desc 'Reset database and apply all migrations'
+  task :reset => :recreate do |t|
+    ENV['GORGE_SKIP_MODELS'] = '1'
+    require 'config/boot'
+
+    logger = Gorge.logger(program: 'migrations')
+
+    Sequel.extension :migration
+    logger.info 'Migrating to latest'
+    Sequel::Migrator.run(Sequel::Model.db, "db/migrations")
+  end
 end
 
 namespace :spec do
