@@ -12,11 +12,13 @@ module Gorge
 
       @logger.formatter = proc do |severity, dt, _, message|
         msg = message.dup
-        if msg.is_a? Hash
-          msg.merge! @attributes
-        elsif msg.is_a? String
-          attr_string = @attributes.map { |k, v| "#{ k } = #{ v }" }.join(', ')
-          msg = "#{ msg } (#{ attr_string })"
+        unless @attributes.empty?
+          if msg.is_a? Hash
+            msg.merge! @attributes
+          elsif msg.is_a? String
+            attr_string = @attributes.map { |k, v| "#{ k } = #{ v }" }.join(', ')
+            msg = "#{ msg } (#{ attr_string })"
+          end
         end
 
         JSON.dump(

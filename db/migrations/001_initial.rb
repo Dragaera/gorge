@@ -4,6 +4,9 @@ Sequel.migration do
       primary_key :id
 
       String :name, null: false, unique: true
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
     end
     [[0, 'Draw'], [1, 'Marines'], [2, 'Aliens']].each do |ary|
       from(:teams).insert(id: ary[0], name: ary[1])
@@ -13,19 +16,25 @@ Sequel.migration do
       primary_key :id
 
       String :name, null: false
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
     end
 
     create_table :rounds do
       primary_key :id
 
-      foreign_key :server_id, :servers, null: false, on_update: :cascade, on_delete: :cascade
-      foreign_key :winning_team_id, :teams, null: false, on_update: :cascade, on_delete: :restrict
+      foreign_key :server_id,       :servers, null: false, on_update: :cascade, on_delete: :cascade
+      foreign_key :winning_team_id, :teams,   null: false, on_update: :cascade, on_delete: :restrict
 
-      Integer  :round_id,            null: false
-      DateTime :timestamp,           null: false
-      Integer  :max_players_marines, null: false
-      Integer  :max_players_aliens,  null: false
-      Bool     :tournament_mode,     null: false
+      Integer :round_id,            null: false
+      Time    :timestamp,           null: false
+      Integer :max_players_marines, null: false
+      Integer :max_players_aliens,  null: false
+      Bool    :tournament_mode,     null: false
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
 
       index [:server_id, :round_id], unique: true
     end
@@ -34,6 +43,9 @@ Sequel.migration do
       primary_key :id
 
       Integer :steam_id, null: false, unique: true
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
     end
 
     create_table :player_rounds do
@@ -60,6 +72,9 @@ Sequel.migration do
       Float :structure_damage, null: false
 
       Integer :score, null: false
+
+      Time :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP
+      Time :updated_at
 
       index [:round_id, :player_id, :team_id], unique: true
     end
