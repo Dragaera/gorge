@@ -7,7 +7,7 @@ networks:
 services:
   database:
     image: 'postgres:9.6'
-    env_file: .env.development
+    env_file: .env.development.docker
     networks:
       - gorge-dev
     ports:
@@ -34,3 +34,26 @@ services:
       - gorge-test
     ports:
       - 26379:6379
+
+  gorge-scheduler:
+    build: .
+    env_file: .env.development.docker
+    command: scheduler
+    networks:
+      - gorge-dev
+
+  gorge-worker:
+    build: .
+    env_file: .env.development.docker
+    command: worker
+    networks:
+      - gorge-dev
+
+  gorge-application:
+    build: .
+    env_file: .env.development.docker
+    command: application
+    ports:
+      - 8080:8080
+    networks:
+      - gorge-dev

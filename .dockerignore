@@ -1,0 +1,19 @@
+# Vim
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# SQLite DBs
+db/*.db
+
+# CTags
+tags
+
+# Dev-only files
+.env*
+!.env.dist
+
+Makefile
+util/
