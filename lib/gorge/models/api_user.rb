@@ -26,6 +26,8 @@ module Gorge
     end
 
     def self.authenticate(user, token)
+      return nil unless UUID.validate user
+
       user = APIUser.where(enabled: true).first(user: user, token: token)
       user.update(last_used_at: Time.now) if user
 

@@ -50,6 +50,10 @@ module Gorge
         expect(APIUser.authenticate(api_user_disabled.user, api_user_disabled.token)).to be_nil
       end
 
+      it 'returns nil if the supplied UUID is invalid' do
+        expect(APIUser.authenticate('foo', 'bar')).to be_nil
+      end
+
       it 'updates the last_used_at timestamp' do
         Timecop.freeze(Time.new(2018, 1, 1)) do
           expect { APIUser.authenticate(api_user.user, api_user.token) }.to change { api_user.refresh.last_used_at }.to(Time.new(2018, 1, 1))

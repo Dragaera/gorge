@@ -20,6 +20,7 @@ gem 'rake'
 
 gem 'warning'
 
+gem 'uuid'
 
 group :development do
   gem 'ruby-prof'
