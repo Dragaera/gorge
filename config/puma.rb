@@ -4,6 +4,7 @@ workers     = ENV.fetch('PUMA_WORKERS', 2).to_i
 listen_ip   = ENV.fetch('PUMA_LISTEN_IP', '0.0.0.0')
 listen_port = ENV.fetch('PUMA_LISTEN_PORT', '8080').to_i
 
+environment ENV.fetch('APPLICATION_ENV', 'development')
 threads threads_min, threads_max
 workers workers
 bind "tcp://#{ listen_ip }:#{ listen_port }"
