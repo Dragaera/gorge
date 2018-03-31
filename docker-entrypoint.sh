@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$APPLICATION_ENV" ]; then
+    export APPLICATION_ENV=production
+fi
+echo "APPLICATION_ENV=$APPLICATION_ENV"
+
 function main {
     _wait_for_redis
     _wait_for_database
@@ -29,8 +34,8 @@ function main {
             exec rake db:migrate
             ;;
         shell)
-            echo "Opening Padrino shell"
-            exec rake gorge:shell
+            echo "Opening shell"
+            exec rake gorge:console
             ;;
         *)
             echo "Don't know what to do with $1"

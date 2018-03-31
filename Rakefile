@@ -9,7 +9,7 @@ task 'resque:scheduler' => 'resque:setup'
 namespace :gorge do
   desc 'Spawns an interactive console'
   task :console do |t|
-    exec 'bundle exec pry -I. -r config/boot'
+    exec 'bundle exec irb -I. -r config/boot'
   end
 
   desc 'Setup environment'
