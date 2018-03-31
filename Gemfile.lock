@@ -11,6 +11,7 @@ GEM
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
     builder (3.2.3)
+    byebug (10.0.2)
     coderay (1.1.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -51,6 +52,9 @@ GEM
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pry-byebug (3.6.0)
+      byebug (~> 10.0)
+      pry (~> 0.10)
     puma (3.11.3)
     rack (2.0.4)
     rack-accept (0.4.5)
@@ -132,6 +136,7 @@ DEPENDENCIES
   grape_logging
   pg
   pry
+  pry-byebug
   puma
   rack-test
   rake
