@@ -5,3 +5,7 @@ spec/examples.txt
 
 # YARD
 .yardoc/
+
+# Build artefacts
+image_name
+image_version
