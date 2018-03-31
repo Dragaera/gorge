@@ -8,8 +8,9 @@ task 'resque:scheduler' => 'resque:setup'
 
 namespace :gorge do
   desc 'Spawns an interactive console'
-  task :console do |t|
-    exec 'bundle exec pry -I. -r config/boot'
+  task :console => :environment do |t|
+    interactive_ruby = ENV.fetch('INTERACTIVE_RUBY', 'irb')
+    exec "bundle exec #{ interactive_ruby } -I. -r config/boot"
   end
 
   desc 'Setup environment'
