@@ -2,6 +2,10 @@ module Gorge
   FactoryBot.define do
     to_create(&:save)
 
+    trait :disabled do
+      enabled false
+    end
+
     factory :server, class: Gorge::Server do
       name 'FactoryBot Server'
     end
@@ -46,6 +50,12 @@ module Gorge
       url 'http://localhost/foo'
       server
       update_frequency { Gorge::UpdateFrequency.first(auto_update: true) }
+    end
+
+    factory :api_user, class: Gorge::APIUser do
+      user { SecureRandom.uuid }
+      token { SecureRandom.hex(32) }
+      enabled true
     end
   end
 end

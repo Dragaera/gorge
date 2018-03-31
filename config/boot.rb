@@ -8,7 +8,7 @@ Bundler.require(:default, APPLICATION_ENV)
 # Ignore all uninitialized instance variable warnings
 Warning.ignore(/instance variable @\w+ not initialized/)
 
-Dotenv.load(".env.#{ APPLICATION_ENV }")
+Dotenv.load(".env.#{ APPLICATION_ENV }") if ['development', 'testing'].include? APPLICATION_ENV
 
 # Needed by eg database config
 require 'gorge/logger'

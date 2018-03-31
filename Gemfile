@@ -20,6 +20,8 @@ gem 'rake'
 
 gem 'warning'
 
+gem 'uuid'
+
 group :development do
   gem 'ruby-prof'
   gem 'yard'
@@ -28,6 +30,7 @@ end
 group :development, :testing do
   gem 'dotenv'
   gem 'pry'
+  gem 'pry-byebug'
 end
 
 group :testing do
