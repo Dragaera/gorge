@@ -5,7 +5,7 @@ module Gorge
     end
 
     module Database
-      ADAPTER  = ENV.fetch('DB_ADAPTER')
+      ADAPTER  = 'postgres'
       HOST     = ENV['DB_HOST']
       PORT     = ENV['DB_PORT']
       DATABASE = ENV.fetch('DB_DATABASE')
