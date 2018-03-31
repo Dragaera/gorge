@@ -10,7 +10,6 @@ module Gorge
         ds3 = create(:data_source, next_update_at: Time.new(2018, 1, 1, 15))
 
         Timecop.freeze(Time.new(2018, 1, 1, 14)) do
-        puts Time.now
           expect(DataSource.stale).to match_array([ds1, ds2])
         end
       end
