@@ -1,5 +1,9 @@
 module Gorge
   module Config
+    def self.to_bool(v)
+      ['y', '1', 'true'].include? v.to_s.downcase
+    end
+
     module Database
       ADAPTER  = ENV.fetch('DB_ADAPTER')
       HOST     = ENV['DB_HOST']
@@ -25,6 +29,10 @@ module Gorge
       ERROR_THRESHOLD          = ENV.fetch('DATA_IMPORT_ERROR_THRESHOLD', 5).to_i
       DATA_FILE_RETENTION_TIME = ENV.fetch('DATA_IMPORT_DATA_FILE_RETENTION_TIME', 7 * 24 * 60 * 60).to_i
       UPDATE_GRACE_PERIOD      = ENV.fetch('DATA_IMPORT_UPDATE_GRACE_PERIOD', 4 * 60 * 60).to_i
+    end
+
+    module API
+      ENABLE_AUTHENTICATION = Gorge::Config.to_bool(ENV.fetch('API_ENABLE_AUTHENTICATION', 'y'))
     end
   end
 end

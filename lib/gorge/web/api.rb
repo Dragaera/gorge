@@ -6,6 +6,19 @@ module Gorge
       logger Gorge.logger(program: 'api', module_: 'players')
       use GrapeLogging::Middleware::RequestLogger, { logger: Gorge.logger(program: 'api', module_: 'requests') }
 
+      if Config::API::ENABLE_AUTHENTICATION
+        http_basic do |username, password|
+          user = APIUser.authenticate(username, password)
+          if user
+            logger.debug({ msg: 'authentication success', user: username })
+            true
+          else
+            logger.warn({ msg: 'authentication failure', user: username })
+            false
+          end
+        end
+      end
+
       helpers do
         def logger
           API.logger
