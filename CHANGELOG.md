@@ -8,9 +8,6 @@ glance - what to expact from upgrading to a new version.
 
 ### Added
 
-- Ingestion of NS2+-based Wonitor statistics
-  - Per-player accuracy, KDR, ...
-
 ### Changed
 
 ### Fixed
@@ -20,3 +17,16 @@ glance - what to expact from upgrading to a new version.
 ### Deprecated
 
 ### Removed
+
+## [0.1.0] - 2018-04-01
+
+### Added
+
+- Ingestion of NS2+-based Wonitor statistics
+  - Per-player accuracy, KDR, ...
+
+- HTTP-based API
+  - Optional authentication
+
+- Automatic downloads of NS2+ / Wonitor databases via HTTP
+
