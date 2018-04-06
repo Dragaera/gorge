@@ -12,3 +12,7 @@ build:
 
 push: build
 	IMAGE_NAME=${IMAGE_NAME} util/push_container.sh
+
+clean:
+	@echo "Cleaning application environment"
+	docker-compose down -v

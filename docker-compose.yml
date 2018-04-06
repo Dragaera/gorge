@@ -4,6 +4,12 @@ networks:
   gorge-dev:
   gorge-test:
 
+volumes:
+  database-data:
+  database-testing-data:
+  redis-data:
+  redis-testing-data:
+
 services:
   database:
     image: 'postgres:9.6'
@@ -12,6 +18,8 @@ services:
       - gorge-dev
     ports:
       - 15432:5432
+    volumes:
+      - database-data:/var/lib/postgresql/data
 
   database-testing:
     image: 'postgres:9.6'
@@ -20,20 +28,26 @@ services:
       - gorge-test
     ports:
       - 15433:5432
+    volumes:
+      - database-testing-data:/var/lib/postgresql/data
 
   redis:
-    image: 'redis:3'
+    image: 'redis:4'
     networks:
       - gorge-dev
     ports:
       - 16379:6379
+    volumes:
+      - redis-data:/data
 
   redis-test:
-    image: 'redis:3'
+    image: 'redis:4'
     networks:
       - gorge-test
     ports:
       - 26379:6379
+    volumes:
+      - redis-testing-data:/data
 
 # gorge-scheduler:
 #   build: .
