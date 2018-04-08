@@ -17,25 +17,25 @@ module Gorge
       total_stats = player_rounds_dataset.
         select {
           [
-            (sum(hits).cast(:float) / (sum(hits) + sum(misses))).as(accuracy),
-            (sum(kills).cast(:float) / sum(deaths)).as(kdr)
+            (sum(hits).cast(:float) / Sequel.case({ { (sum(hits) + sum(misses)) => 0 } => 1 }, sum(hits) + sum(misses))).as(accuracy),
+            (sum(kills).cast(:float) / Sequel.case({ { sum(:deaths) => 0 } => 1 }, sum(:deaths))).as(kdr),
           ]
       }.first
 
       alien_stats = alien_rounds_dataset.
         select {
           [
-            (sum(hits).cast(:float) / (sum(hits) + sum(misses))).as(accuracy),
-            (sum(kills).cast(:float) / sum(deaths)).as(kdr)
+            (sum(hits).cast(:float) / Sequel.case({ { (sum(hits) + sum(misses)) => 0 } => 1 }, sum(hits) + sum(misses))).as(accuracy),
+            (sum(kills).cast(:float) / Sequel.case({ { sum(:deaths) => 0 } => 1 }, sum(:deaths))).as(kdr),
           ]
       }.first
 
       marine_stats = marine_rounds_dataset.
         select {
           [
-            (sum(hits).cast(:float) / (sum(hits) + sum(misses))).as(accuracy),
-            ((sum(hits).cast(:float) - sum(onos_hits)) / (sum(hits) - sum(onos_hits) + sum(misses))).as(accuracy_no_onos),
-            (sum(kills).cast(:float) / sum(deaths)).as(kdr)
+            (sum(hits).cast(:float) / Sequel.case({ { (sum(hits) + sum(misses)) => 0 } => 1 }, sum(hits) + sum(misses))).as(accuracy),
+            (sum(kills).cast(:float) / Sequel.case({ { sum(:deaths) => 0 } => 1 }, sum(:deaths))).as(kdr),
+            ((sum(hits).cast(:float) - sum(onos_hits)) / Sequel.case({ { (sum(hits) - sum(onos_hits) + sum(misses)) => 0 } => 1 }, sum(hits) - sum(onos_hits) + sum(misses))).as(accuracy_no_onos),
           ]
       }.first
 
@@ -61,7 +61,7 @@ module Gorge
     def accuracy
       player_rounds_dataset.
         select_map {
-          sum(hits).cast(:float) / (sum(hits) + sum(misses))
+          sum(hits).cast(:float) / Sequel.case({ { (sum(hits) + sum(misses)) => 0 } => 1 }, sum(hits) + sum(misses))
       }.first
     end
 
@@ -69,7 +69,7 @@ module Gorge
     def alien_accuracy
       alien_rounds_dataset.
         select_map {
-          sum(hits).cast(:float) / (sum(hits) + sum(misses))
+          sum(hits).cast(:float) / Sequel.case({ { (sum(hits) + sum(misses)) => 0 } => 1 }, sum(hits) + sum(misses))
       }.first
     end
 
@@ -79,12 +79,12 @@ module Gorge
       if include_onos
         marine_rounds_dataset.
           select_map {
-            sum(hits).cast(:float) / (sum(hits) + sum(misses))
+            sum(hits).cast(:float) / Sequel.case({ { (sum(hits) + sum(misses)) => 0 } => 1 }, sum(hits) + sum(misses))
         }.first
       else
         marine_rounds_dataset.
           select_map {
-            (sum(hits).cast(:float) - sum(onos_hits)) / (sum(hits) - sum(onos_hits) + sum(misses))
+            (sum(hits).cast(:float) - sum(onos_hits)) / Sequel.case({ { (sum(hits) - sum(onos_hits) + sum(misses)) => 0 } => 1 }, sum(hits) - sum(onos_hits) + sum(misses))
         }.first
       end
     end
@@ -93,7 +93,7 @@ module Gorge
     def kdr
       player_rounds_dataset.
         select_map {
-          sum(kills).cast(:float) / sum(deaths)
+          sum(kills).cast(:float) / Sequel.case({ { sum(:deaths) => 0 } => 1 }, sum(:deaths))
       }.first
     end
 
@@ -101,7 +101,7 @@ module Gorge
     def alien_kdr
       alien_rounds_dataset.
         select_map {
-          sum(kills).cast(:float) / sum(deaths)
+          sum(kills).cast(:float) / Sequel.case({ { sum(:deaths) => 0 } => 1 }, sum(:deaths))
       }.first
     end
 
@@ -109,7 +109,7 @@ module Gorge
     def marine_kdr
       marine_rounds_dataset.
         select_map {
-        sum(kills).cast(:float) / sum(deaths)
+          sum(kills).cast(:float) / Sequel.case({ { sum(:deaths) => 0 } => 1 }, sum(:deaths))
       }.first
     end
   end
