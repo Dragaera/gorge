@@ -12,6 +12,9 @@ glance - what to expact from upgrading to a new version.
 
 ### Fixed
 
+- Exceptions when calculating KDR and accuracy of players with combinations of
+  zero deaths, hits, misses etc.
+
 ### Security
 
 ### Deprecated
