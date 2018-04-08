@@ -12,8 +12,13 @@ glance - what to expact from upgrading to a new version.
 
 ### Fixed
 
-- Exceptions when calculating KDR and accuracy of players with combinations of
-  zero deaths, hits, misses etc.
+- Exceptions when calculating various player statistics, caused by dividing by zero:
+  - `Player#kdr`, `Player#marine_kdr`, `Player#alien_kdr`: Zero deaths
+  - `Player#accuracy`, `Player#marine_accuracy`, `Player#alien_accuracy`: Zero
+    hits and misses
+  - `Player#marine_accuracy(include_onos: false)`: Exclusively onos hits, and
+    no misses
+  - `Player#statistics`: All of the above.
 
 ### Security
 

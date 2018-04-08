@@ -174,7 +174,24 @@ module Gorge
       # Can't rely on tests for #kdr etc, as #statistics has duplicated
       # queries, to be able to do it in as few queries as possible.
       it 'handles the player having odd data' do
-        expect { odd_player.statistics }.to_not raise_exception
+        expected = {
+          steam_id: odd_player.steam_id,
+          kdr: {
+            total:  odd_player.kdr,
+            alien:  odd_player.alien_kdr,
+            marine: odd_player.marine_kdr,
+          },
+          accuracy: {
+            total: odd_player.accuracy,
+            alien: odd_player.alien_accuracy,
+            marine: {
+              total:   odd_player.marine_accuracy,
+              no_onos: odd_player.marine_accuracy(include_onos: false),
+            }
+          }
+        }
+
+        expect(odd_player.statistics).to eq (expected)
       end
     end
   end
