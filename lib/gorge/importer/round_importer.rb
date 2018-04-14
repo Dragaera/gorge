@@ -25,6 +25,7 @@ module Gorge
             [
               hsh.fetch(:roundId),
               hsh.fetch(:roundDate),
+              hsh.fetch(:roundLength),
               hsh.fetch(:maxPlayers1),
               hsh.fetch(:maxPlayers2),
               hsh.fetch(:tournamentMode) == 1,
@@ -37,6 +38,7 @@ module Gorge
             [
               :round_id,
               :timestamp,
+              :length,
               :max_players_marines,
               :max_players_aliens,
               :tournament_mode,

@@ -33,6 +33,7 @@ module Gorge
         db.create_table 'RoundInfo' do
           primary_key :roundId
           String      :roundDate
+          Integer     :roundLength
           Integer     :maxPlayers1
           Integer     :maxPlayers2
           Integer     :tournamentMode
@@ -51,17 +52,18 @@ module Gorge
           [
             :roundId,
             :roundDate,
+            :roundLength,
             :maxPlayers1,
             :maxPlayers2,
             :tournamentMode,
             :winningTeam
           ],
           [
-            [1, '2017-01-01 01:00:00', 12, 12, 0, 1],
-            [2, '2017-01-01 02:00:00', 10, 12, 0, 2],
-            [3, '2017-01-01 03:00:00', 10, 11, 0, 1],
-            [4, '2017-01-01 04:00:00', 12, 12, 0, 0],
-            [5, '2017-01-01 05:00:00', 12, 12, 1, 1],
+            [1, '2017-01-01 01:00:00', 65,   12, 12, 0, 1],
+            [2, '2017-01-01 02:00:00', 2000, 10, 12, 0, 2],
+            [3, '2017-01-01 03:00:00', 1750, 10, 11, 0, 1],
+            [4, '2017-01-01 04:00:00', 1232, 12, 12, 0, 0],
+            [5, '2017-01-01 05:00:00', 900,  12, 12, 1, 1],
           ]
         )
       end

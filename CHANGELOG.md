@@ -8,6 +8,8 @@ glance - what to expact from upgrading to a new version.
 
 ### Added
 
+- Import round length from NS2+/wonitor database.
+
 ### Changed
 
 ### Fixed

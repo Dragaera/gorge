@@ -35,6 +35,12 @@ module Gorge
           expect(round.max_players_aliens).to eq 11
         end
 
+        it 'should handle round length' do
+          subject.import
+          expect(Round.first(round_id: 1).length).to eq 65
+          expect(Round.first(round_id: 5).length).to eq 900
+        end
+
         it 'should attach it to the appropriate server' do
           subject.import
           Round.each do |round|
