@@ -12,6 +12,17 @@ glance - what to expact from upgrading to a new version.
 
 ### Fixed
 
+### Security
+
+### Deprecated
+
+### Removed
+
+
+## [0.1.1] - 2018-04-14
+
+### Fixed
+
 - Exceptions when calculating various player statistics, caused by dividing by zero:
   - `Player#kdr`, `Player#marine_kdr`, `Player#alien_kdr`: Zero deaths
   - `Player#accuracy`, `Player#marine_accuracy`, `Player#alien_accuracy`: Zero
@@ -20,11 +31,6 @@ glance - what to expact from upgrading to a new version.
     no misses
   - `Player#statistics`: All of the above.
 
-### Security
-
-### Deprecated
-
-### Removed
 
 ## [0.1.0] - 2018-04-01
 
