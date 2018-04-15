@@ -24,6 +24,7 @@ module Gorge
           new_round_data = new_round_hashes.map do |hsh|
             [
               hsh.fetch(:roundId),
+              1,
               hsh.fetch(:roundDate),
               hsh.fetch(:roundLength),
               hsh.fetch(:maxPlayers1),
@@ -37,6 +38,7 @@ module Gorge
           Round.import(
             [
               :round_id,
+              :map_id,
               :timestamp,
               :length,
               :max_players_marines,
