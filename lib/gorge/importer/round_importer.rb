@@ -12,6 +12,7 @@ module Gorge
       end
 
       def import
+        map_cache = generate_map_cache
         round_count = round_info.count
 
         total_batch_count = (round_count.to_f / ROUND_IMPORT_BATCH_SIZE).ceil
@@ -24,7 +25,7 @@ module Gorge
           new_round_data = new_round_hashes.map do |hsh|
             [
               hsh.fetch(:roundId),
-              1,
+              map_cache.fetch(hsh.fetch(:mapName)),
               hsh.fetch(:roundDate),
               hsh.fetch(:roundLength),
               hsh.fetch(:maxPlayers1),
@@ -85,6 +86,19 @@ module Gorge
 
       def round_info
         @source_db.from(:RoundInfo)
+      end
+
+      def generate_map_cache
+        map_count = Map.count
+        @l.debug({ msg: 'Generating round cache.' })
+
+        cache = @source_db.from(:RoundInfo).select_map { distinct(mapName) }.map do |name|
+          [name, Map.get_or_create(name).id]
+        end.to_h
+
+        @l.debug({ msg: 'Map cache generated.', new_maps: Map.count - map_count })
+
+        cache
       end
     end
   end

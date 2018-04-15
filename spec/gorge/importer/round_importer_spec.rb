@@ -47,6 +47,22 @@ module Gorge
             expect(round.server).to eq server
           end
         end
+
+        it 'should create not-yet-existing maps' do
+          expect { subject.import }.to change { Map.count }.by(2)
+        end
+
+        it 'should handle maps' do
+          subject.import
+
+          [1, 2].each do |i|
+            expect(Round.first(round_id: i).map.name).to eq 'ns2_foo'
+          end
+
+          [3, 4, 5].each do |i|
+            expect(Round.first(round_id: i).map.name).to eq 'ns2_bar_2'
+          end
+        end
       end
     end
   end
