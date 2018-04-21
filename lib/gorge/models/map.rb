@@ -8,5 +8,7 @@ module Gorge
         create(name: name)
       end
     end
+
+    one_to_many :rounds
   end
 end
