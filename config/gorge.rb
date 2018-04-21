@@ -29,6 +29,8 @@ module Gorge
       ERROR_THRESHOLD          = ENV.fetch('DATA_IMPORT_ERROR_THRESHOLD', 5).to_i
       DATA_FILE_RETENTION_TIME = ENV.fetch('DATA_IMPORT_DATA_FILE_RETENTION_TIME', 7 * 24 * 60 * 60).to_i
       UPDATE_GRACE_PERIOD      = ENV.fetch('DATA_IMPORT_UPDATE_GRACE_PERIOD', 4 * 60 * 60).to_i
+
+      Dir.mkdir STORAGE_PATH unless Dir.exist? STORAGE_PATH
     end
 
     module API
