@@ -13,6 +13,8 @@ module Gorge
 
       def import
         map_cache = generate_map_cache
+        location_cache = generate_location_cache(map_cache)
+
         round_count = round_info.count
 
         total_batch_count = (round_count.to_f / ROUND_IMPORT_BATCH_SIZE).ceil
@@ -23,11 +25,26 @@ module Gorge
           new_round_hashes, skipped_rounds_count = *args
 
           new_round_data = new_round_hashes.map do |hsh|
+            # startingLocation1 / startingLocation2 are *1-based* indices of
+            # the names in this array.
+            locations_ary = JSON.parse(hsh.fetch(:locationNames))
             [
               hsh.fetch(:roundId),
-              map_cache.fetch(hsh.fetch(:mapName)),
-              1,
-              1,
+              map_cache.fetch(hsh.fetch(:mapName)).id,
+              location_cache.fetch(
+                hsh.fetch(:mapName)
+              ).fetch(
+                locations_ary[
+                  hsh.fetch(:startingLocation2).to_i - 1
+                ]
+              ).id,
+              location_cache.fetch(
+                hsh.fetch(:mapName)
+              ).fetch(
+                locations_ary[
+                  hsh.fetch(:startingLocation1).to_i - 1
+                ]
+              ).id,
               hsh.fetch(:roundDate),
               hsh.fetch(:roundLength),
               hsh.fetch(:maxPlayers1),
@@ -97,12 +114,27 @@ module Gorge
         @l.debug({ msg: 'Generating round cache.' })
 
         cache = @source_db.from(:RoundInfo).select_map { distinct(mapName) }.map do |name|
-          [name, Map.get_or_create(name).id]
+          [name, Map.get_or_create(name)]
         end.to_h
 
         @l.debug({ msg: 'Map cache generated.', new_maps: Map.count - map_count })
 
         cache
+      end
+
+      def generate_location_cache(map_cache)
+        location_count = Location.count
+        @l.debug({ msg: 'Generating location cache.' })
+
+        @source_db.from(:roundInfo).select { [locationNames, mapName] }.group_by(:mapName, :locationNames).map do |hsh|
+          map = map_cache.fetch(hsh.fetch(:mapName))
+
+          inner_hsh = JSON.parse(hsh[:locationNames]).map do |name|
+            [name, Location.get_or_create(name, map: map)]
+          end.to_h
+
+          [map.name, inner_hsh]
+        end.to_h
       end
     end
   end

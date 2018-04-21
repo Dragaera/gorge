@@ -10,6 +10,7 @@ glance - what to expact from upgrading to a new version.
 
 - Importer: Store round lengths.
 - Importer: Store map names.
+- Importer: Store marine and alien starting locations.
 
 ### Changed
 
