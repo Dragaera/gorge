@@ -65,5 +65,11 @@ module Gorge
     factory :map, class: Gorge::Map do
       sequence(:name) { |i| "ns2_map#{ i }" }
     end
+
+    factory :location, class: Gorge::Location do
+      map
+
+      sequence(:name) { |i| "ns2_map#{ i }" }
+    end
   end
 end
