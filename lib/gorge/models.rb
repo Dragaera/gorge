@@ -1,6 +1,7 @@
 require 'gorge/models/api_user'
 require 'gorge/models/data_source'
 require 'gorge/models/data_source_update'
+require 'gorge/models/location'
 require 'gorge/models/map'
 require 'gorge/models/player'
 require 'gorge/models/player_round'

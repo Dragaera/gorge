@@ -2,6 +2,8 @@
 
 module Gorge
   class Round < Sequel::Model
+    many_to_one :alien_starting_location, class: 'Gorge::Location'
+    many_to_one :marine_starting_location, class: 'Gorge::Location'
     many_to_one :map
     one_to_many :player_rounds
     many_to_one :server

@@ -63,6 +63,18 @@ module Gorge
             expect(Round.first(round_id: i).map.name).to eq 'ns2_bar_2'
           end
         end
+
+        it 'should create not-yet-existing locations' do
+          expect { subject.import }.to change { Location.count }.by(6)
+        end
+
+        it 'should handle locations' do
+          subject.import
+
+          round_1 = Round.first(round_id: 1)
+          expect(round_1.alien_starting_location.name).to eq 'foo_3'
+          expect(round_1.marine_starting_location.name).to eq 'foo_1'
+        end
       end
     end
   end

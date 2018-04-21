@@ -26,6 +26,8 @@ module Gorge
             [
               hsh.fetch(:roundId),
               map_cache.fetch(hsh.fetch(:mapName)),
+              1,
+              1,
               hsh.fetch(:roundDate),
               hsh.fetch(:roundLength),
               hsh.fetch(:maxPlayers1),
@@ -40,6 +42,8 @@ module Gorge
             [
               :round_id,
               :map_id,
+              :alien_starting_location_id,
+              :marine_starting_location_id,
               :timestamp,
               :length,
               :max_players_marines,

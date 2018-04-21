@@ -18,6 +18,8 @@ module Gorge
       server
 
       map_id 1
+      alien_starting_location_id 1
+      marine_starting_location_id 1
 
       sequence(:round_id)
       timestamp Time.new(2017, 1, 1)
