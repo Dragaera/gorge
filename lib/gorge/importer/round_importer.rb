@@ -126,15 +126,24 @@ module Gorge
         location_count = Location.count
         @l.debug({ msg: 'Generating location cache.' })
 
-        @source_db.from(:roundInfo).select { [locationNames, mapName] }.group_by(:mapName, :locationNames).map do |hsh|
+        cache = {}
+
+        @source_db.from(:roundInfo).select { [locationNames, mapName] }.group_by(:mapName, :locationNames).each do |hsh|
           map = map_cache.fetch(hsh.fetch(:mapName))
 
+          # { 'location_name': Location }
           inner_hsh = JSON.parse(hsh[:locationNames]).map do |name|
             [name, Location.get_or_create(name, map: map)]
           end.to_h
 
-          [map.name, inner_hsh]
-        end.to_h
+          if cache.key? map.name
+            inner_hsh = inner_hsh.merge(cache[map.name])
+          end
+
+          cache[map.name] = inner_hsh
+        end
+
+        cache
       end
     end
   end

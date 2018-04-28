@@ -53,8 +53,9 @@ module Gorge
 
       private
       def populate_rounds(db)
-        foo_locations = ['foo_1', 'foo_2', 'foo_3'].to_json
-        bar_locations = ['bar_1', 'bar_2', 'bar_3'].to_json
+        foo_locations     = ['foo_1', 'foo_2', 'foo_3'].to_json
+        bar_locations     = ['bar_1', 'bar_2', 'bar_3'].to_json
+        bar_locations_new = ['baz_1', 'baz_2', 'baz_3'].to_json
         db[:RoundInfo].import(
           [
             :roundId,
@@ -74,7 +75,7 @@ module Gorge
             [2, '2017-01-01 02:00:00', 2000, 10, 12, 0, 2, 'ns2_foo',   foo_locations, '1', '3'],
             [3, '2017-01-01 03:00:00', 1750, 10, 11, 0, 1, 'ns2_bar_2', bar_locations, '2', '3'],
             [4, '2017-01-01 04:00:00', 1232, 12, 12, 0, 0, 'ns2_bar_2', bar_locations, '2', '3'],
-            [5, '2017-01-01 05:00:00', 900,  12, 12, 1, 1, 'ns2_bar_2', bar_locations, '2', '3'],
+            [5, '2017-01-01 05:00:00', 900,  12, 12, 1, 1, 'ns2_bar_2', bar_locations_new, '2', '3'],
           ]
         )
       end
