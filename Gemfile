@@ -7,9 +7,9 @@ gem 'sqlite3'
 
 gem 'typhoeus'
 
-gem 'resque'
-gem 'resque-scheduler'
-gem 'resque-job-stats'
+gem 'resque', '>= 1.27.4'
+gem 'resque-scheduler', '>= 4.3.1'
+gem 'resque-job-stats', '>= 0.4.2'
 
 gem 'grape'
 gem 'grape_logging'
