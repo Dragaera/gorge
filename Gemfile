@@ -5,7 +5,7 @@ gem 'pg'
 gem 'sequel_pg', require: 'sequel'
 gem 'sqlite3'
 
-gem 'typhoeus'
+gem 'typhoeus', '>= 1.3.0'
 
 gem 'resque'
 gem 'resque-scheduler'
