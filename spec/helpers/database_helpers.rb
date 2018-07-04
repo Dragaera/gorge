@@ -30,6 +30,13 @@ module Gorge
           primary_key [:roundId, :steamId, :teamNumber]
         end
 
+        db.create_table 'PlayerClassStats' do
+          Integer :roundId
+          Integer :steamId
+          String  :class
+          Float   :classTime
+        end
+
         db.create_table 'RoundInfo' do
           primary_key :roundId
           String      :roundDate
@@ -47,6 +54,7 @@ module Gorge
 
         populate_rounds(db)
         populate_player_rounds(db)
+        populate_player_class_stats(db)
 
         db
       end
@@ -114,6 +122,24 @@ module Gorge
             [2, 101, 1, 3600, 60,  900,  3, 6, 7, 2, 2_500,  10, 10_000, 7_500,     0,  75],
             [2, 102, 2, 3600, 60, 3600,  7, 1, 4, 1,   750, 500,  4_000,   500, 1_700,  72],
             [2, 103, 2, 1800, 60,    0,  1, 3, 9, 1, 1_250, 250,  2_500, 3_000,   500,  25],
+          ]
+        )
+      end
+
+      def populate_player_class_stats(db)
+        db[:PlayerClassStats].import(
+          [
+            :roundId,
+            :steamId,
+            :class,
+            :classTime,
+          ],
+          [
+            [1, 100, 'Rifle', 1000],
+            [1, 100, 'Shotgun', 500],
+            [1, 100, 'Gorge', 200],
+            [1, 100, 'Onos', 3000],
+            [2, 100, 'Rifle',50]
           ]
         )
       end
