@@ -15,6 +15,8 @@ glance - what to expact from upgrading to a new version.
 
 ### Changed
 
+- Update ruby to `2.5.1`, update dependencies.
+
 ### Fixed
 
 - Attempt to create `DataImport::STORAGE_PATH` if it doesn't exist yet.
