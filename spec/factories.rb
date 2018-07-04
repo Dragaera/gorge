@@ -17,6 +17,10 @@ module Gorge
     factory :round, class: Gorge::Round do
       server
 
+      map_id 1
+      alien_starting_location_id 1
+      marine_starting_location_id 1
+
       sequence(:round_id)
       timestamp Time.new(2017, 1, 1)
       max_players_marines 8
@@ -56,6 +60,16 @@ module Gorge
       user { SecureRandom.uuid }
       token { SecureRandom.hex(32) }
       enabled true
+    end
+
+    factory :map, class: Gorge::Map do
+      sequence(:name) { |i| "ns2_map#{ i }" }
+    end
+
+    factory :location, class: Gorge::Location do
+      map
+
+      sequence(:name) { |i| "ns2_map#{ i }" }
     end
   end
 end

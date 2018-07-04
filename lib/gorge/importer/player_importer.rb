@@ -38,7 +38,7 @@ module Gorge
 
         player_round_stats.distinct.select(:steamId).each_page(PLAYER_IMPORT_BATCH_SIZE) do |id_ds|
           new_ids_in_batch = id_ds.map { |hsh| hsh[:steamId] }
-          existing_ids = Player.distinct.select(:steam_id).where(steam_id: new_ids_in_batch).map(&:steam_id)
+          existing_ids = Player.where(steam_id: new_ids_in_batch).select_map(:steam_id)
           new_ids_in_batch -= existing_ids
 
           yield(new_ids_in_batch, existing_ids)

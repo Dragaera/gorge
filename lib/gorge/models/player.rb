@@ -3,6 +3,7 @@
 module Gorge
   class Player < Sequel::Model
     one_to_many :player_rounds
+    one_to_many :player_class_statistic
 
     def alien_rounds_dataset
       player_rounds_dataset.where(team: Team.aliens)

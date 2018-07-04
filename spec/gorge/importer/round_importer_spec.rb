@@ -35,11 +35,53 @@ module Gorge
           expect(round.max_players_aliens).to eq 11
         end
 
+        it 'should handle round length' do
+          subject.import
+          expect(Round.first(round_id: 1).length).to eq 65
+          expect(Round.first(round_id: 5).length).to eq 900
+        end
+
         it 'should attach it to the appropriate server' do
           subject.import
           Round.each do |round|
             expect(round.server).to eq server
           end
+        end
+
+        it 'should create not-yet-existing maps' do
+          expect { subject.import }.to change { Map.count }.by(2)
+        end
+
+        it 'should handle maps' do
+          subject.import
+
+          [1, 2].each do |i|
+            expect(Round.first(round_id: i).map.name).to eq 'ns2_foo'
+          end
+
+          [3, 4, 5].each do |i|
+            expect(Round.first(round_id: i).map.name).to eq 'ns2_bar_2'
+          end
+        end
+
+        it 'should create not-yet-existing locations' do
+          expect { subject.import }.to change { Location.count }.by(9)
+        end
+
+        it 'should handle locations' do
+          subject.import
+
+          round_1 = Round.first(round_id: 1)
+          expect(round_1.alien_starting_location.name).to eq 'foo_3'
+          expect(round_1.marine_starting_location.name).to eq 'foo_1'
+        end
+
+        it 'should handle maps with changing locations' do
+          subject.import
+
+          round_5 = Round.first(round_id: 5)
+          expect(round_5.alien_starting_location.name).to eq 'baz_3'
+          expect(round_5.marine_starting_location.name).to eq 'baz_2'
         end
       end
     end
