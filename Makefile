@@ -1,7 +1,7 @@
 .PHONY: build push clean tag release
 
 IMAGE_NAME = lavode/gorge
-SENTRY_PROJECT = observatory
+SENTRY_PROJECT = gorge
 SENTRY_ORGANIZATION = dragaera
 COMMIT_ID := $(shell git rev-parse HEAD)
 
