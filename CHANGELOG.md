@@ -12,13 +12,18 @@ glance - what to expact from upgrading to a new version.
 
 ### Fixed
 
-- Wrong sentry.io project in Makefile.
-
 ### Security
 
 ### Deprecated
 
 ### Removed
+
+
+## [0.2.1] - 2018-08-12
+
+### Fixed
+
+- Wrong sentry.io project in Makefile.
 
 
 ## [0.2.0] - 2018-08-12
