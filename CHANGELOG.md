@@ -8,6 +8,21 @@ glance - what to expact from upgrading to a new version.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Security
+
+### Deprecated
+
+### Removed
+
+
+## [0.2.0] - 2018-08-12
+
+### Added
+
 - Importer: Store round lengths.
 - Importer: Store map names.
 - Importer: Store marine and alien starting locations.
@@ -21,12 +36,6 @@ glance - what to expact from upgrading to a new version.
 ### Fixed
 
 - Attempt to create `DataImport::STORAGE_PATH` if it doesn't exist yet.
-
-### Security
-
-### Deprecated
-
-### Removed
 
 
 ## [0.1.1] - 2018-04-14
