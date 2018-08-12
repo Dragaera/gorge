@@ -36,5 +36,13 @@ module Gorge
     module API
       ENABLE_AUTHENTICATION = Gorge::Config.to_bool(ENV.fetch('API_ENABLE_AUTHENTICATION', 'y'))
     end
+
+    module Sentry
+      DSN = ENV['SENTRY_DSN']
+
+      def self.enabled?
+        DSN && !DSN.empty?
+      end
+    end
   end
 end

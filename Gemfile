@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'sentry-raven'
+
 gem 'sequel'
 gem 'pg'
 gem 'sequel_pg', require: 'sequel'
@@ -7,9 +9,10 @@ gem 'sqlite3'
 
 gem 'typhoeus'
 
-gem 'resque'
+gem 'resque', require: ['resque', 'resque/failure/multiple', 'resque/failure/redis']
 gem 'resque-scheduler'
 gem 'resque-job-stats'
+gem 'resque-sentry'
 
 gem 'grape'
 gem 'grape_logging'

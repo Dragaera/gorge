@@ -26,3 +26,15 @@ unless ENV['GORGE_SKIP_MODELS'] == '1'
 end
 
 Typhoeus::Config.user_agent = 'Gorge (https://github.com/Dragaera/gorge)'
+
+if Gorge::Config::Sentry.enabled?
+  puts 'Configuring sentry integration.'
+
+  Raven.configure do |config|
+    config.dsn = Gorge::Config::Sentry::DSN
+    config.release = Gorge::VERSION
+    config.current_environment = APPLICATION_ENV
+  end
+else
+  puts 'Skipping sentry integration configuration.'
+end
