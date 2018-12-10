@@ -64,6 +64,8 @@ module Gorge
         foo_locations     = ['foo_1', 'foo_2', 'foo_3'].to_json
         bar_locations     = ['bar_1', 'bar_2', 'bar_3'].to_json
         bar_locations_new = ['baz_1', 'baz_2', 'baz_3'].to_json
+        broken_locations  = ['broken_1', 'broken_2', 'broken_3'].to_json
+        broken2_locations = [].to_json
         db[:RoundInfo].import(
           [
             :roundId,
@@ -84,6 +86,8 @@ module Gorge
             [3, '2017-01-01 03:00:00', 1750, 10, 11, 0, 1, 'ns2_bar_2', bar_locations, '2', '3'],
             [4, '2017-01-01 04:00:00', 1232, 12, 12, 0, 0, 'ns2_bar_2', bar_locations, '2', '3'],
             [5, '2017-01-01 05:00:00', 900,  12, 12, 1, 1, 'ns2_bar_2', bar_locations_new, '2', '3'],
+            [6, '2017-01-01 06:00:00', 1000, 12, 12, 1, 1, 'ns2_broken', broken_locations, nil, nil],
+            [7, '2017-01-01 07:00:00', 1000, 12, 12, 1, 1, 'ns2_broken2', broken2_locations, '1', '2'],
           ]
         )
       end

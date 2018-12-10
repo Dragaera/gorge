@@ -9,6 +9,10 @@ module Gorge
       end
     end
 
+    def self.fallback(map: )
+      get_or_create('UNDEFINED', map: map)
+    end
+
     many_to_one :map
   end
 end
