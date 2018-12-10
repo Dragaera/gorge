@@ -12,6 +12,10 @@ glance - what to expact from upgrading to a new version.
 
 ### Fixed
 
+- Allow importing rounds where one or both starting locations are undefined.
+  Likely the result of bugs in NS2+ or the map. Will be stored as 'unknown'
+  starting location.
+
 ### Security
 
 ### Deprecated

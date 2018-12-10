@@ -6,7 +6,7 @@ module Gorge
 
       describe 'importing from a database' do
         it 'should import all rounds' do
-          expect { subject.import }.to change { Round.count }.to 5
+          expect { subject.import }.to change { Round.count }.to 7
         end
 
         it 'should handle tournament mode' do
@@ -49,7 +49,7 @@ module Gorge
         end
 
         it 'should create not-yet-existing maps' do
-          expect { subject.import }.to change { Map.count }.by(2)
+          expect { subject.import }.to change { Map.count }.by(4)
         end
 
         it 'should handle maps' do
@@ -65,7 +65,9 @@ module Gorge
         end
 
         it 'should create not-yet-existing locations' do
-          expect { subject.import }.to change { Location.count }.by(9)
+          # 12 locations defined in DB helper, plus one automatically created
+          # fallback location per map.
+          expect { subject.import }.to change { Location.count }.by(16)
         end
 
         it 'should handle locations' do
@@ -82,6 +84,20 @@ module Gorge
           round_5 = Round.first(round_id: 5)
           expect(round_5.alien_starting_location.name).to eq 'baz_3'
           expect(round_5.marine_starting_location.name).to eq 'baz_2'
+        end
+
+        it 'should handle maps with no locations' do
+          subject.import
+
+          round_6 = Round.first(round_id: 6)
+          expect(round_6.marine_starting_location.name).to eq 'UNDEFINED'
+        end
+
+        it 'should handle maps with undefined starting locations' do
+          subject.import
+
+          round_7 = Round.first(round_id: 7)
+          expect(round_7.marine_starting_location.name).to eq 'UNDEFINED'
         end
       end
     end

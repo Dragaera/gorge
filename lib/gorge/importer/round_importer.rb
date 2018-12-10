@@ -27,28 +27,37 @@ module Gorge
           new_round_data = new_round_hashes.map do |hsh|
             # startingLocation1 / startingLocation2 are *1-based* indices of
             # the names in this array.
+            # In addition, if they are not defined, we want them to stay `nil`.
+            # No special handling would be `nil.to_i - 1 == 0 - 1 == -1` which
+            # would use the last location in the array.
+            map_location_cache = location_cache.fetch(hsh.fetch(:mapName))
+
             locations_ary = JSON.parse(hsh.fetch(:locationNames))
+
+            loc_1_idx = hsh.fetch(:startingLocation1) ? hsh.fetch(:startingLocation1).to_i - 1 : nil
+            location_1 = if loc_1_idx
+                           # Fallback in case specified index references unknown location.
+                           locations_ary.fetch(loc_1_idx, :fallback)
+                         else
+                           :fallback
+                         end
+            loc_2_idx = hsh.fetch(:startingLocation2) ? hsh.fetch(:startingLocation2).to_i - 1 : nil
+            location_2 = if loc_2_idx
+                           # Fallback in case specified index references unknown location.
+                           locations_ary.fetch(loc_2_idx, :fallback)
+                         else
+                           :fallback
+                         end
+
             [
               hsh.fetch(:roundId),
               map_cache.fetch(hsh.fetch(:mapName)).id,
-              location_cache.fetch(
-                hsh.fetch(:mapName)
-              ).fetch(
-                locations_ary[
-                  hsh.fetch(:startingLocation2).to_i - 1
-                ]
-              ).id,
-              location_cache.fetch(
-                hsh.fetch(:mapName)
-              ).fetch(
-                locations_ary[
-                  hsh.fetch(:startingLocation1).to_i - 1
-                ]
-              ).id,
+              map_location_cache.fetch(location_2).id,
+              map_location_cache.fetch(location_1).id,
               hsh.fetch(:roundDate),
               hsh.fetch(:roundLength),
-              hsh.fetch(:maxPlayers1),
               hsh.fetch(:maxPlayers2),
+              hsh.fetch(:maxPlayers1),
               hsh.fetch(:tournamentMode) == 1,
 
               hsh.fetch(:winningTeam),
@@ -63,8 +72,8 @@ module Gorge
               :marine_starting_location_id,
               :timestamp,
               :length,
-              :max_players_marines,
               :max_players_aliens,
+              :max_players_marines,
               :tournament_mode,
               :winning_team_id,
               :server_id
@@ -139,6 +148,8 @@ module Gorge
           if cache.key? map.name
             inner_hsh = inner_hsh.merge(cache[map.name])
           end
+
+          inner_hsh[:fallback] = Location.fallback(map: map)
 
           cache[map.name] = inner_hsh
         end
