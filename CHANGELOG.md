@@ -12,6 +12,12 @@ glance - what to expact from upgrading to a new version.
 
 ### Fixed
 
+- Ensure data source updates are scheduled for the future, even if they were
+  not processed in a long time.  This fixes cases where a data source - if it
+  has not been processed for a long time - is scheduled according to its
+  assigned update frequency, leading to a timestamp in the past, making it
+  execute multiple times in succession.
+
 ### Security
 
 ### Deprecated
