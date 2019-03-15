@@ -47,6 +47,15 @@ module Gorge
                            # manual intervention.
                            next_update_at
                          end
+
+        # If the update failed that often that the time it should have happened
+        # is more than the configured interval ago, then the above will have
+        # scheduled the update for a time in the past.  This would immediately
+        # retrigger an update which is hardly sensible.
+        while (next_update_ts < Time.now) do
+            next_update_ts += update_frequency.interval
+        end
+
         update(
           last_update_at:      Time.now,
           next_update_at:      next_update_ts,
