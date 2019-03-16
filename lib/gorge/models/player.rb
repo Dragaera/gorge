@@ -116,6 +116,8 @@ module Gorge
       map(&:to_hash).
       group_by { |hsh| hsh[:player_id] }
 
+      team_ids = Team.select_map(:id)
+
       # Now we'll have a hash of player_id => [Hash], with 1 to n hashes per
       # player.
       player_stats.each do |player_id, stats|
@@ -135,7 +137,14 @@ module Gorge
           end
         end
 
-        player_stats[player_id] = stats.group_by { |hsh| hsh[:team_id] }
+        # We are guaranteed to only have one entry per team, as we aggregate
+        # over teams.
+        player_stats[player_id] = team_ids.map do |team_id|
+          [
+            team_id,
+            stats.filter { |hsh| hsh[:team_id] == team_id }.first
+          ]
+        end.to_h
       end
 
       player_stats
