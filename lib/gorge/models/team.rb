@@ -2,19 +2,23 @@
 
 module Gorge
   class Team < Sequel::Model
+    DRAW_ID    = 0
+    MARINES_ID = 1
+    ALIENS_ID  = 2
+
     one_to_many :rounds, key: :winning_team_id
     one_to_many :player_rounds
 
     def self.draw
-      Team[0]
+      Team[DRAW_ID]
     end
 
     def self.marines
-      Team[1]
+      Team[MARINES_ID]
     end
 
     def self.aliens
-      Team[2]
+      Team[ALIENS_ID]
     end
   end
 end
