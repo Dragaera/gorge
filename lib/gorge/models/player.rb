@@ -203,22 +203,46 @@ module Gorge
       }
     end
 
-    def cached_statistics
-      PlayerStatisticsClass.map do |cls|
-        [
-          cls,
-          Team.map do |team|
-            [
-              team,
-              PlayerCurrentStatistics.lookup(
-                player: self,
-                statistics_class: cls,
-                team: team
-              )
-            ]
-          end.to_h
-        ]
-      end.to_h
+    def cached_statistics(statistics_class:)
+      alien_stats = PlayerCurrentStatistics.lookup(
+        player: self,
+        statistics_class: statistics_class,
+        team: Team.aliens
+      )
+
+      marine_stats = PlayerCurrentStatistics.lookup(
+        player: self,
+        statistics_class: statistics_class,
+        team: Team.marines
+      )
+
+      out = {
+        steam_id: steam_id,
+        kdr: {
+          alien:  nil,
+          marine: nil,
+        },
+        accuracy: {
+          alien: nil,
+          marine: {
+            total: nil,
+            no_onos: nil,
+          }
+        }
+      }
+
+      if alien_stats
+        out[:kdr][:alien]      = alien_stats.kdr
+        out[:accuracy][:alien] = alien_stats.accuracy
+      end
+
+      if marine_stats
+        out[:kdr][:marine]                = marine_stats.kdr
+        out[:accuracy][:marine][:total]   = marine_stats.accuracy
+        out[:accuracy][:marine][:no_onos] = marine_stats.accuracy_no_onos
+      end
+
+      out
     end
 
     # @return [Float] Overall accuracy.
