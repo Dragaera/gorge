@@ -70,8 +70,6 @@ module Gorge
       #
       #     JOIN rounds AS r 
       #       ON r.id = pr.round_id 
-      #
-      #     WHERE pr.player_id < 10
       # ) AS rounds 
       #
       # WHERE rounds.round_number <= 100 
@@ -91,7 +89,7 @@ module Gorge
           Sequel[:player_rounds][:round_id],
           :timestamp,
           row_number.function.over(
-            partition: :player_id,
+            partition: [:player_id, :team_id],
             order: Sequel.desc(:timestamp)
           ).as(:round_number)
       ] }.
