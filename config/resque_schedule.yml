@@ -16,3 +16,11 @@ reset_pending_updates:
   class: Gorge::Jobs::ResetPendingUpdates
   args:
   description: 'Reset the "update pending" status of data sources after a certain grace period.'
+
+update_player_statistics:
+  # Tuesdays at 00:00. This is based on the fact that all data source updates
+  # happen on Mondays - but is obviously rather brittle.
+  cron: '0 0 * * 2'
+  class: Gorge::Jobs::UpdatePlayerStatistics
+  args:
+  description: 'Reset the "update pending" status of data sources after a certain grace period.'
