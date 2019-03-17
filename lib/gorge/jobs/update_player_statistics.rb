@@ -65,6 +65,12 @@ player_statistics = Player.statistics(sample_size: cls.sample_size)
         player_ids = tuples.map { |ary| ary[0] }
         team_ids   = tuples.map { |ary| ary[1] }
         class_ids  = [statistics_class.id] * tuples.length
+        # TODO: This will not detect changes if rounds older than the
+        # previously newest are added, which might happen if a data source is
+        # eg delayed.
+        # And MD5 over the collection of (round_id, server_id) might help.  On
+        # the other hand this is an issue which will fix itself, once a more
+        # recent round of the player is ingested, leading to recalculation.
         to_timestamps = tuples.map { |ary| ary[13] }
         new_identities = Set.new(player_ids.zip(team_ids, class_ids, to_timestamps))
 
