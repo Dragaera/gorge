@@ -2,6 +2,9 @@
 
 module Gorge
   class Team < Sequel::Model
+    one_to_many :player_statistics,         class: 'Gorge::PlayerStatistics'
+    one_to_many :player_current_statistics, class: 'Gorge::PlayerCurrentStatistics'
+
     DRAW_ID    = 0
     MARINES_ID = 1
     ALIENS_ID  = 2

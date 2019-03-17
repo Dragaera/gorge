@@ -3,7 +3,9 @@
 module Gorge
   class Player < Sequel::Model
     one_to_many :player_rounds
-    one_to_many :player_class_statistic
+    one_to_many :player_class_statistics
+    one_to_many :player_statistics,         class: 'Gorge::PlayerStatistics'
+    one_to_many :player_current_statistics, class: 'Gorge::PlayerCurrentStatistics'
 
     # Calculate player-level statistics for all players over their last
     # `sample_size` rounds. It will calculate:
@@ -199,6 +201,24 @@ module Gorge
           }
         }
       }
+    end
+
+    def cached_statistics
+      PlayerStatisticsClass.map do |cls|
+        [
+          cls,
+          Team.map do |team|
+            [
+              team,
+              PlayerCurrentStatistics.lookup(
+                player: self,
+                statistics_class: cls,
+                team: team
+              )
+            ]
+          end.to_h
+        ]
+      end.to_h
     end
 
     # @return [Float] Overall accuracy.
