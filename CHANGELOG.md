@@ -10,8 +10,6 @@ glance - what to expact from upgrading to a new version.
 
 ### Changed
 
-- Update ruby to `2.6.1`.
-
 ### Fixed
 
 ### Security
@@ -19,6 +17,13 @@ glance - what to expact from upgrading to a new version.
 ### Deprecated
 
 ### Removed
+
+
+## [0.3.1] - 2019-03-17
+
+### Changed
+
+- Update ruby to `2.6.1`.
 
 
 ## [0.3.0] - 2019-03-17
