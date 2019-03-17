@@ -31,17 +31,38 @@ module Gorge
 
         desc "Return a player's statistics"
         params do
-          requires :steam_id, type: Integer, desc: 'Steam ID'
+          requires :steam_id,           type: Integer,       desc: 'Steam ID'
+          requires :statistics_classes, type: Array[String], desc: 'Identifiers of statistics classes'
         end
         route_param :steam_id do
           get :statistics do
             player = Player.first(steam_id: params[:steam_id])
-
-            if player
-              player.statistics
-            else
+            unless player
               error! 'No such player', 404
             end
+
+            classes = params[:statistics_classes].map do |name|
+              cls = PlayerStatisticsClass.first(name: name)
+              unless cls
+                error! "No such statistics class: #{ name }", 404
+              end
+
+              cls
+            end
+
+            out = {
+              _: {
+                steam_id: player.steam_id
+              }
+            }
+
+            classes.each do |cls|
+              stats_point = player.cached_statistics(statistics_class: cls)
+              stats_point.merge!({ _: { sample_size: cls.sample_size }})
+              out[cls.name] = stats_point
+            end
+
+            out
           end
         end
       end
