@@ -50,14 +50,19 @@ module Gorge
               cls
             end
 
-            classes.map do |cls|
-              [
-                cls.name,
-                {
-                  _: { sample_size: cls.sample_size },
-                }.merge(player.cached_statistics(statistics_class: cls))
-              ]
-            end.to_h
+            out = {
+              _: {
+                steam_id: player.steam_id
+              }
+            }
+
+            classes.each do |cls|
+              stats_point = player.cached_statistics(statistics_class: cls)
+              stats_point.merge!({ _: { sample_size: cls.sample_size }})
+              out[cls.name] = stats_point
+            end
+
+            out
           end
         end
       end

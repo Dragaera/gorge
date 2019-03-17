@@ -217,7 +217,6 @@ module Gorge
       )
 
       out = {
-        steam_id: steam_id,
         kdr: {
           alien:  nil,
           marine: nil,
