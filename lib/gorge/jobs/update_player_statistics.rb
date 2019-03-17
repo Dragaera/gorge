@@ -16,7 +16,7 @@ module Gorge
           @logger.add_attribute(:player_statistics_class, cls.name)
           @logger.add_attribute(:sample_size, cls.sample_size)
           @logger.info({ msg:'Generating player statistics.' })
-player_statistics = Player.statistics(sample_size: cls.sample_size)
+          player_statistics = Player.statistics(sample_size: cls.sample_size)
 
           tuples = self.prepare_tuples(player_statistics, statistics_class: cls)
           tuples = self.remove_unchanged_tuples(tuples, statistics_class: cls)
@@ -180,25 +180,15 @@ player_statistics = Player.statistics(sample_size: cls.sample_size)
         #   player_statistics_class_id
         # ) 
         #
-        # SELECT DISTINCT 
-        #   ON(
-        #     s.player_id,
-        #     s.team_id,
-        #     s.player_statistics_class_id
-        #   ) 
+        # SELECT 
         #   s.id,
         #   s.player_id,
         #   s.team_id,
-        #   s.player_statistics_class_id 
+        #   s.player_statistics_class_id
         #
         # FROM player_statistics AS s
         #
-        # ORDER BY 
-        #   s.player_id,
-        #   s.team_id,
-        #   s.player_statistics_class_id,
-        #   s.to 
-        #   DESC 
+        # WHERE s.id IN (...)
         #
         # ON CONFLICT (
         #   player_id,
