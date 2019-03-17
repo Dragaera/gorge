@@ -10,6 +10,8 @@ glance - what to expact from upgrading to a new version.
 
 ### Changed
 
+- Update ruby to `2.6.1`.
+
 ### Fixed
 
 ### Security
