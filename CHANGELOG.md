@@ -8,6 +8,21 @@ glance - what to expact from upgrading to a new version.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Security
+
+### Deprecated
+
+### Removed
+
+
+## [0.3.0] - 2019-03-17
+
+### Added
+
 - Caching of player statistics.
   This adds the ability to pre-calculate and store per-player statistics like
   KDR and accuracy. When queried, the API will then serve the most recent
@@ -16,8 +31,6 @@ glance - what to expact from upgrading to a new version.
   To accomodate multiple use-cases, various statistic classes can be defined,
   which influence the sample size to use for calculation of these statistics.
 
-### Changed
-
 ### Fixed
 
 - Ensure data source updates are scheduled for the future, even if they were
@@ -25,12 +38,6 @@ glance - what to expact from upgrading to a new version.
   has not been processed for a long time - is scheduled according to its
   assigned update frequency, leading to a timestamp in the past, making it
   execute multiple times in succession.
-
-### Security
-
-### Deprecated
-
-### Removed
 
 
 ## [0.2.2] - 2018-12-10
