@@ -20,6 +20,7 @@ gem 'puma'
 gem 'shotgun'
 
 gem 'rake'
+gem 'pry'
 
 gem 'warning'
 
@@ -32,7 +33,6 @@ end
 
 group :development, :testing do
   gem 'dotenv'
-  gem 'pry'
   gem 'pry-byebug'
 end
 

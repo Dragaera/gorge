@@ -10,6 +10,11 @@ glance - what to expact from upgrading to a new version.
 
 ### Changed
 
+- Install `pry` in all environments.
+  Allows for much more comfortable usage of an interactive shell in prod than
+  with plain `irb`.  Also prevents having to install `irb`, which was moved
+  into a gem in ruby `2.6.x`.
+
 ### Fixed
 
 ### Security
