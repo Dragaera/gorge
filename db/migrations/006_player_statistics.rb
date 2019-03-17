@@ -40,10 +40,10 @@ Sequel.migration do
     # - for one of the given statistics classes
     # the current statistics point
     create_table :player_current_statistics do
-      foreign_key :player_id,                  :players,                   null: false, on_update: :cascade, on_delete: :cascade
-      foreign_key :team_id,                    :teams,                     null: false, on_update: :cascade, on_delete: :cascade
-      foreign_key :player_statistics_id,       :player_statistics,         null: false, on_update: :cascade, on_delete: :cascade
-      foreign_key :player_statistics_class_id, :player_statistics_classes, null: false, on_update: :cascade, on_delete: :cascade
+      foreign_key :player_id,                  :players,                                 null: false, on_update: :cascade, on_delete: :cascade
+      foreign_key :team_id,                    :teams,                                   null: false, on_update: :cascade, on_delete: :cascade
+      foreign_key :player_statistics_class_id, :player_statistics_classes,               null: false, on_update: :cascade, on_delete: :cascade
+      foreign_key :player_statistics_id,       :player_statistics,         unique: true, null: false, on_update: :cascade, on_delete: :cascade
 
       primary_key [:player_id, :team_id, :player_statistics_class_id]
     end
