@@ -23,4 +23,4 @@ update_player_statistics:
   cron: '0 0 * * 2'
   class: Gorge::Jobs::UpdatePlayerStatistics
   args:
-  description: 'Reset the "update pending" status of data sources after a certain grace period.'
+  description: 'Update player statistics.'
