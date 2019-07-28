@@ -119,12 +119,16 @@ module Gorge
       end
 
       def generate_map_cache
+        @l.debug({ msg: 'Generating map cache.' })
         map_count = Map.count
-        @l.debug({ msg: 'Generating round cache.' })
+        cache = Map.generate_cache
+        maps_in_source = @source_db.from(:RoundInfo).select_map { distinct(mapName) }
 
-        cache = @source_db.from(:RoundInfo).select_map { distinct(mapName) }.map do |name|
-          [name, Map.get_or_create(name)]
-        end.to_h
+        @l.debug({ msg: 'Adding unknown maps.' })
+        (maps_in_source - cache.keys).each do |map_name|
+          map = Map.get_or_create(map_name)
+          cache[map_name] = map
+        end
 
         @l.debug({ msg: 'Map cache generated.', new_maps: Map.count - map_count })
 
@@ -132,27 +136,30 @@ module Gorge
       end
 
       def generate_location_cache(map_cache)
-        location_count = Location.count
         @l.debug({ msg: 'Generating location cache.' })
+        location_count = Location.count
+        cache = Location.generate_cache
 
-        cache = {}
+        @l.debug({ msg: 'Adding unknown location/map pairs' })
+        locations_in_source = @source_db.
+          from(:roundInfo).
+          select { [locationNames, mapName] }.
+          group_by(:mapName, :locationNames)
 
-        @source_db.from(:roundInfo).select { [locationNames, mapName] }.group_by(:mapName, :locationNames).each do |hsh|
-          map = map_cache.fetch(hsh.fetch(:mapName))
-
-          # { 'location_name': Location }
-          inner_hsh = JSON.parse(hsh[:locationNames]).map do |name|
-            [name, Location.get_or_create(name, map: map)]
-          end.to_h
-
-          if cache.key? map.name
-            inner_hsh = inner_hsh.merge(cache[map.name])
+        locations_in_source.each do |hsh|
+          map_name = hsh.fetch(:mapName)
+          location_names = JSON.parse(hsh.fetch(:locationNames))
+          location_names.each do |location_name|
+            if cache.fetch(map_name).key? location_name
+              # Location already present in cache, nothing to do
+            else
+              location = Location.get_or_create(location_name, map: map_cache.fetch(map_name))
+              cache.fetch(map_name)[location_name] = location
+            end
           end
-
-          inner_hsh[:fallback] = Location.fallback(map: map)
-
-          cache[map.name] = inner_hsh
         end
+
+        @l.debug({ msg: 'Location cache generated.', new_locations: Location.count - location_count })
 
         cache
       end
