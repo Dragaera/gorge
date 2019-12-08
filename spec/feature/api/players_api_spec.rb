@@ -6,60 +6,79 @@ module Gorge
       describe "querying for a player's statistics" do
         it "returns a JSON data structure with the player's statistics" do
           player = create(:player, steam_id: 1)
-          create(
-            :player_round,
-            player: player,
-            kills: 10,
-            deaths: 5,
-            hits: 100,
-            onos_hits: 50,
-            misses: 900,
-            team: Team.marines
-          )
 
-          create(
-            :player_round,
+          cls = create(:player_statistics_class, name: 'n_1', sample_size: 1)
+          alien_stats = create(
+            :player_statistics,
+            player_statistics_class: cls,
             player: player,
+            team: Gorge::Team.aliens
+          )
+          PlayerCurrentStatistics.create(
+            player: player,
+            team: Gorge::Team.aliens,
+            player_statistics_class: cls,
+            player_statistics: alien_stats
+          )
+          marine_stats = create(
+            :player_statistics,
+            player_statistics_class: cls,
+            player: player,
+            team: Gorge::Team.marines,
             kills: 20,
             deaths: 5,
-            hits: 500,
-            onos_hits: 0,
-            misses: 500,
-            team: Team.aliens
+            kdr: 4,
+            hits: 1000,
+            misses: 5000,
+            onos_hits: 500,
+            accuracy: 0.2,
+            accuracy_no_onos: 0.1,
+          )
+          PlayerCurrentStatistics.create(
+            player: player,
+            team: Gorge::Team.marines,
+            player_statistics_class: cls,
+            player_statistics: marine_stats
           )
 
-
-          get '/players/1/statistics'
+          get '/players/1/statistics', { statistics_classes: cls.name }
           expect(last_response).to be_ok
 
           data = JSON.parse(last_response.body)
           expect(data).to eq (
             {
-              'steam_id' => player.steam_id,
-              'accuracy' => {
-                'total' => player.accuracy,
-                'alien' => player.alien_accuracy,
-                'marine' => {
-                  'total' => player.marine_accuracy,
-                  'no_onos' => player.marine_accuracy(include_onos: false)
-                }
+              '_' => {
+                'steam_id' => 1,
               },
-              'kdr' => {
-                'total' => player.kdr,
-                'alien' => player.alien_kdr,
-                'marine' => player.marine_kdr
-              }
+              'n_1' => {
+                '_' => {
+                  'sample_size' => 1,
+                },
+                'accuracy' => {
+                  'alien' => 0.1,
+                  'marine' => {
+                    'total' => 0.2,
+                    'no_onos' => 0.1,
+                  },
+                },
+                'kdr' => {
+                  'alien' => 1.0,
+                  'marine' => 4.0,
+                },
+              },
             }
           )
         end
 
         it 'returns an HTTP 400 if the supplied Steam ID is non-numeric' do
-          get '/players/test/statistics'
+          cls = create(:player_statistics_class)
+          get '/players/test/statistics', { statistics_classes: cls.name }
           expect(last_response.status).to eq 400
         end
 
         it 'returns an HTTP 404 if querying for a non-existant player' do
-          get '/players/123/statistics'
+          cls = create(:player_statistics_class)
+          get '/players/123/statistics', { statistics_classes: cls.name }
           expect(last_response.status).to eq 404
         end
       end
