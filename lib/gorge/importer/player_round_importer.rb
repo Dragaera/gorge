@@ -27,6 +27,7 @@ module Gorge
               player_id_map.fetch(hsh.fetch(:steamId)),
               round_id_map.fetch(hsh.fetch(:roundId)),
               hsh.fetch(:teamNumber),
+              hsh.fetch(:lastTeam),
 
               hsh.fetch(:timePlayed),
               hsh.fetch(:timeBuilding),
@@ -49,6 +50,7 @@ module Gorge
               :player_id,
               :round_id,
               :team_id,
+              :last_team_id,
 
               :time_played,
               :time_building,

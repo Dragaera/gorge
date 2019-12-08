@@ -34,6 +34,7 @@ module Gorge
       round
 
       team { Gorge::Team.marines }
+      last_team { team }
       time_played { 600 }
       time_building { 60 }
       time_commander { 30 }

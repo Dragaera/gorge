@@ -5,12 +5,14 @@ module Gorge
     many_to_one :player
     many_to_one :round
     many_to_one :team
+    many_to_one :last_team, class: 'Gorge::Team'
 
     def ==(other)
       other.class == PlayerRound &&
         other.player_id == player_id &&
         other.round_id == round_id &&
         other.team_id == team_id &&
+        other.last_team_id == last_team_id &&
         other.time_played == time_played &&
         other.time_building == time_building &&
         other.time_commander == time_commander &&

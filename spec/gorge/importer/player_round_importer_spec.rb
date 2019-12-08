@@ -16,17 +16,22 @@ module Gorge
         end
 
         it 'should import all player rounds' do
-          expect { subject.import }.to change { PlayerRound.count }.to 8
+          expect { subject.import }.to change { PlayerRound.count }.to 9
         end
 
         it 'should handle team number' do
           subject.import
 
+          player0 = Player.first(steam_id: 100)
           player1 = Player.first(steam_id: 101)
           player2 = Player.first(steam_id: 102)
           round = Round.first(round_id: 1, server: server)
           expect(PlayerRound.first(player: player1, round: round).team).to eq Team.marines
           expect(PlayerRound.first(player: player2, round: round).team).to eq Team.aliens
+
+          PlayerRound.where(player: player0, round: round).each do |pr|
+            expect(pr.last_team).to eq Team.marines
+          end
         end
 
         it 'should handle all other attributes' do
@@ -35,30 +40,32 @@ module Gorge
           player = Player.first(steam_id: 101)
           round = Round.first(round_id: 1, server: server)
 
+          should = build(:player_round,
+                         player: player,
+                         round: round,
+                         team: Team.marines,
+                         last_team: Team.marines,
+                         time_played: 3600,
+                         time_building: 60,
+                         time_commander: 900,
+                         kills: 3,
+                         assists: 6,
+                         deaths: 7,
+                         killstreak: 2,
+                         hits: 2_500,
+                         onos_hits: 10,
+                         misses: 10_000,
+                         player_damage: 7_500,
+                         structure_damage: 0,
+                         score: 75
+            )
           expect(
             PlayerRound.first(
               player: player,
               round:  round,
             )
           ).to eq(
-            build(:player_round,
-              player: player,
-              round: round,
-              team: Team.marines,
-              time_played: 3600,
-              time_building: 60,
-              time_commander: 900,
-              kills: 3,
-              assists: 6,
-              deaths: 7,
-              killstreak: 2,
-              hits: 2_500,
-              onos_hits: 10,
-              misses: 10_000,
-              player_damage: 7_500,
-              structure_damage: 0,
-              score: 75
-            )
+            should
           )
         end
       end
